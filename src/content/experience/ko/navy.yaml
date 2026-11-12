@@ -1,6 +1,7 @@
 kind: military
 org: 대한민국 해군
-role: 병역
+role: 조타병
+description: 병장 만기 전역
 start: "2022.03"
 end: "2023.11"
 order: 5
