@@ -1,0 +1,30 @@
+---
+/**
+ * 루트(/) 접속 시 언어별 홈으로 이동합니다.
+ * 브라우저 언어가 한국어가 아니면 /en/, 그 외에는 /ko/ 로 보냅니다.
+ * JavaScript가 꺼져 있으면 meta refresh로 /ko/ 로 이동합니다.
+ */
+import { defaultLang } from '@/i18n/ui';
+const fallback = `/${defaultLang}/`;
+---
+
+<!doctype html>
+<html lang={defaultLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>shark-soong</title>
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href={new URL(fallback, Astro.site)} />
+    <script is:inline>
+      (function () {
+        var lang = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+        location.replace(/^ko\b/i.test(lang) || lang === '' ? '/ko/' : '/en/');
+      })();
+    </script>
+    <meta http-equiv="refresh" content={`1; url=${fallback}`} />
+  </head>
+  <body>
+    <a href="/ko/">한국어</a> · <a href="/en/">English</a>
+  </body>
+</html>

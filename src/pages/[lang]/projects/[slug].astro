@@ -1,0 +1,148 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { langs, type Lang } from '@/i18n/ui';
+import { getProjects, localizePath, useTranslations, type LocalizedProject } from '@/i18n/utils';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const lang of langs) {
+    for (const project of await getProjects(lang)) {
+      paths.push({ params: { lang, slug: project.slug }, props: { project } });
+    }
+  }
+  return paths;
+}
+
+interface Props {
+  project: LocalizedProject;
+}
+const lang = Astro.params.lang as Lang;
+const t = useTranslations(lang);
+const { project } = Astro.props;
+const { data } = project.entry;
+const { Content } = await render(project.entry);
+---
+
+<BaseLayout lang={lang} title={data.title} description={data.summary}>
+  <article class="container article">
+    <a href={localizePath(lang, '/projects/')} class="back">{t('projects.back')}</a>
+
+    {project.isFallback && <p class="notice" role="note">{t('projects.fallback')}</p>}
+
+    <header class="head">
+      <h1>{data.title}</h1>
+      <p class="summary">{data.summary}</p>
+      <dl class="meta">
+        {
+          data.role && (
+            <div>
+              <dt>{t('projects.role')}</dt>
+              <dd>{data.role}</dd>
+            </div>
+          )
+        }
+        {
+          data.period && (
+            <div>
+              <dt>{t('projects.period')}</dt>
+              <dd>{data.period}</dd>
+            </div>
+          )
+        }
+      </dl>
+      <div class="row">
+        <div class="tags">{data.tags.map((tag) => <span class="tag">{tag}</span>)}</div>
+        <div class="links">
+          {data.repo && <a href={data.repo} class="btn">{t('projects.repo')} ↗</a>}
+          {data.demo && <a href={data.demo} class="btn btn--solid">{t('projects.demo')} ↗</a>}
+        </div>
+      </div>
+    </header>
+
+    {data.thumbnail && <Image src={data.thumbnail} alt="" class="thumb" widths={[720, 1120]} sizes="(max-width: 1120px) 100vw, 1120px" />}
+
+    <div class="prose" lang={project.isFallback ? project.entry.id.split('/')[0] : undefined}>
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .article {
+    padding-bottom: var(--section-y);
+  }
+  .back {
+    display: inline-block;
+    margin-top: 2rem;
+    font-size: 0.9375rem;
+    color: var(--color-muted);
+  }
+  .notice {
+    margin-top: 1.5rem;
+    padding: 0.875rem 1.125rem;
+    border-radius: 12px;
+    background: var(--color-chip);
+    font-size: var(--text-sm);
+    color: var(--color-text-soft);
+  }
+  .head {
+    padding-block: 3.5rem 3rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+  h1 {
+    font-size: clamp(2.25rem, 5.5vw, 4rem);
+    letter-spacing: var(--tracking-display);
+    line-height: var(--leading-tight);
+    overflow-wrap: anywhere;
+  }
+  .summary {
+    margin-top: 1.25rem;
+    max-width: 44rem;
+    font-size: var(--text-lg);
+    color: var(--color-text-soft);
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 3rem;
+    margin: 2rem 0 0;
+  }
+  .meta:empty {
+    display: none;
+  }
+  dt {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  dd {
+    margin: 0.25rem 0 0;
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+  }
+  .tags,
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .thumb {
+    width: 100%;
+    margin-top: 3rem;
+    border-radius: 16px;
+  }
+  .prose {
+    max-width: 44rem;
+    padding-top: 1rem;
+  }
+</style>

@@ -1,0 +1,86 @@
+---
+import type { LocalizedProject } from '@/i18n/utils';
+import { localizePath } from '@/i18n/utils';
+import type { Lang } from '@/i18n/ui';
+
+interface Props {
+  lang: Lang;
+  project: LocalizedProject;
+  first?: boolean;
+}
+const { lang, project, first = false } = Astro.props;
+const { data } = project.entry;
+const meta = data.period ?? data.date?.getFullYear().toString() ?? '';
+---
+
+<li class:list={['row', { first }]}>
+  <a href={localizePath(lang, `/projects/${project.slug}/`)}>
+    <span class="meta">{meta}</span>
+    <div class="main">
+      <h3>{data.title}</h3>
+      <p>{data.summary}</p>
+    </div>
+    <div class="tags">
+      {data.tags.map((tag) => <span class="tag">{tag}</span>)}
+    </div>
+  </a>
+</li>
+
+<style>
+  .row {
+    border-top: 1px solid var(--color-border);
+  }
+  .row.first {
+    border-top-color: var(--color-text);
+  }
+  a {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.5rem;
+    padding-block: 2.25rem;
+  }
+  .meta {
+    flex: 0 0 7.5rem;
+    font-size: 0.9375rem;
+    color: var(--color-muted);
+  }
+  .main {
+    flex: 999 1 30rem;
+    min-width: 0;
+  }
+  h3 {
+    font-size: var(--text-2xl);
+    letter-spacing: var(--tracking-tight);
+    font-weight: 600;
+    overflow-wrap: anywhere;
+    transition: color 0.15s;
+  }
+  a:hover h3 {
+    color: var(--color-accent);
+  }
+  p {
+    margin-top: 0.75rem;
+    max-width: 40rem;
+    color: var(--color-text-soft);
+  }
+  a:hover p {
+    color: var(--color-text-soft);
+  }
+  .tags {
+    flex: 1 1 12.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-content: flex-start;
+    justify-content: flex-end;
+    color: var(--color-text);
+  }
+  @media (max-width: 640px) {
+    .meta:empty {
+      display: none;
+    }
+    .tags {
+      justify-content: flex-start;
+    }
+  }
+</style>

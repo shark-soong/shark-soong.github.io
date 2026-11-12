@@ -1,0 +1,58 @@
+---
+import { type Lang } from '@/i18n/ui';
+import { getProfile } from '@/i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const profile = await getProfile(lang);
+const { github, email, linkedin, blog } = profile.links;
+
+const links = [
+  github && { href: github, label: 'GitHub ↗' },
+  email && { href: `mailto:${email}`, label: email },
+  linkedin && { href: linkedin, label: 'LinkedIn ↗' },
+  blog && { href: blog, label: 'Blog ↗' },
+].filter((l): l is { href: string; label: string } => Boolean(l));
+---
+
+<section id="contact" class="contact">
+  <h2>{profile.contactTitle}</h2>
+  <ul class="links">
+    {
+      links.map((l) => (
+        <li>
+          <a href={l.href} rel={l.href.startsWith('http') ? 'me noopener' : undefined}>
+            {l.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .contact {
+    padding-block: 7rem 7.5rem;
+  }
+  h2 {
+    font-size: var(--text-contact);
+    letter-spacing: -0.03em;
+    font-weight: 700;
+    line-height: 1.15;
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+    margin: 2rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 1.125rem;
+  }
+  a {
+    border-bottom: 2px solid currentColor;
+    padding-bottom: 2px;
+  }
+</style>

@@ -1,0 +1,48 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ProjectRow from '@/components/ProjectRow.astro';
+import { langs, type Lang } from '@/i18n/ui';
+import { getProjects, useTranslations } from '@/i18n/utils';
+
+export function getStaticPaths() {
+  return langs.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const t = useTranslations(lang);
+const projects = await getProjects(lang);
+---
+
+<BaseLayout lang={lang} title={t('projects.pageTitle')}>
+  <div class="container">
+    <header class="head">
+      <h1>{t('projects.pageTitle')}</h1>
+      <p>{t('projects.pageIntro')}</p>
+    </header>
+    <ul class="list">
+      {projects.map((project, i) => <ProjectRow lang={lang} project={project} first={i === 0} />)}
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .head {
+    padding-block: 5rem 3.5rem;
+  }
+  h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    letter-spacing: var(--tracking-display);
+    line-height: var(--leading-tight);
+  }
+  .head p {
+    margin-top: 1.25rem;
+    font-size: var(--text-lg);
+    color: var(--color-text-soft);
+  }
+  .list {
+    margin: 0 0 var(--section-y);
+    padding: 0;
+    list-style: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+</style>

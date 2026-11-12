@@ -1,0 +1,17 @@
+# Basic info shown on the home page (English)
+# TODO: replace the [bracketed] parts.
+name: "[Name]"
+eyebrow: "Electrical & Computer Engineering · Seoul"
+greeting: "Hi, I'm"
+headline: "[Name]."
+intro: "I study Electrical and Computer Engineering at Ajou University. This is where I keep track of what I build and what I learn."
+about: "[2–3 sentences about you — interests, current focus, how you work]"
+skills:
+  - Python
+  - Jupyter
+contactTitle: "Let's talk."
+links:
+  github: "https://github.com/shark-soong"
+  # email: "you@example.com"
+  # linkedin: "https://www.linkedin.com/in/..."
+# resume: "/resume/resume-en.pdf"

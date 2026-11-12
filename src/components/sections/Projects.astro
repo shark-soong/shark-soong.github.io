@@ -1,0 +1,53 @@
+---
+import ProjectRow from '@/components/ProjectRow.astro';
+import { site } from '@/config/site';
+import { type Lang } from '@/i18n/ui';
+import { getProjects, localizePath, useTranslations } from '@/i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const all = await getProjects(lang);
+// featured: true 를 먼저, 부족하면 최신순으로 채움
+const featured = [
+  ...all.filter((p) => p.entry.data.featured),
+  ...all.filter((p) => !p.entry.data.featured),
+].slice(0, site.featuredLimit);
+---
+
+<section id="projects" class="projects">
+  <div class="head">
+    <h2 class="label">{t('section.projects')}</h2>
+    <a href={localizePath(lang, '/projects/')} class="all">{t('projects.all')}</a>
+  </div>
+  <ul class="list">
+    {featured.map((project, i) => <ProjectRow lang={lang} project={project} first={i === 0} />)}
+  </ul>
+</section>
+
+<style>
+  .projects {
+    padding-block: var(--section-y);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 2.5rem;
+  }
+  .all {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-accent);
+  }
+  .list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+</style>
