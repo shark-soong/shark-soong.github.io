@@ -1,6 +1,6 @@
 kind: education
 org: 아주대학교
-role: 전자·컴퓨터공학 전공
+role: 전자공학과
 start: "[입학년도]"   # TODO: 예) "2023.03"
 # end: "2027.02"      # 비워두면 "현재"로 표시
 order: 10
