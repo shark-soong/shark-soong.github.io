@@ -1,0 +1,79 @@
+---
+/** 단독 페이지: src/content/pages/<언어>/<slug>.md → /<언어>/<slug>/ (예: /ko/now/) */
+import { render } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { langs, type Lang } from '@/i18n/ui';
+import { formatDate, getPages, useTranslations, type Localized } from '@/i18n/utils';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const lang of langs) {
+    for (const page of await getPages(lang)) {
+      paths.push({ params: { lang, slug: page.slug }, props: { page } });
+    }
+  }
+  return paths;
+}
+
+interface Props {
+  page: Localized<'pages'>;
+}
+const lang = Astro.params.lang as Lang;
+const t = useTranslations(lang);
+const { page } = Astro.props;
+const { data } = page.entry;
+const { Content } = await render(page.entry);
+const contentLang = page.isFallback ? page.contentLang : undefined;
+---
+
+<BaseLayout lang={lang} title={data.title} description={data.description}>
+  <article class="container page">
+    {page.isFallback && <p class="notice" role="note">{t('fallback.notice')}</p>}
+    <header class="head" lang={contentLang}>
+      <h1>{data.title}</h1>
+      {
+        data.updated && (
+          <p class="updated" lang={lang}>
+            {t('page.updated')} · <time datetime={data.updated.toISOString()}>{formatDate(data.updated, lang)}</time>
+          </p>
+        )
+      }
+    </header>
+    <div class="prose" lang={contentLang}>
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-bottom: var(--section-y);
+  }
+  .notice {
+    margin-top: 2rem;
+    padding: 0.875rem 1.125rem;
+    border-radius: 12px;
+    background: var(--color-chip);
+    font-size: var(--text-sm);
+    color: var(--color-text-soft);
+  }
+  .head {
+    padding-block: 5rem 2.5rem;
+  }
+  h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    letter-spacing: var(--tracking-display);
+    line-height: var(--leading-tight);
+  }
+  .updated {
+    margin-top: 1rem;
+    font-size: 0.9375rem;
+    color: var(--color-muted);
+  }
+  .prose {
+    max-width: 44rem;
+  }
+  .prose :global(h2:first-child) {
+    margin-top: 0;
+  }
+</style>

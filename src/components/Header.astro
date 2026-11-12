@@ -1,29 +1,38 @@
 ---
 import LangSwitch from './LangSwitch.astro';
 import { type Lang } from '@/i18n/ui';
-import { localizePath, useTranslations } from '@/i18n/utils';
-import { site } from '@/config/site';
+import { getPages, getProfile, localizePath, useTranslations } from '@/i18n/utils';
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const home = localizePath(lang, '/');
+const profile = await getProfile(lang);
+const navPages = (await getPages(lang))
+  .filter((p) => p.entry.data.nav)
+  .sort((a, b) => a.entry.data.navOrder - b.entry.data.navOrder);
 
-// 메뉴 항목 — 추가/삭제/순서 변경은 여기서
+// 메뉴 항목 — 고정 메뉴는 여기서, 단독 페이지는 pages/*.md 의 nav: true 로 추가
 const items = [
-  { href: `${home}#about`, label: t('nav.about') },
+  { href: localizePath(lang, '/writing/'), label: t('nav.writing') },
   { href: localizePath(lang, '/projects/'), label: t('nav.projects') },
-  { href: `${home}#experience`, label: t('nav.experience') },
-  { href: `${home}#contact`, label: t('nav.contact') },
+  ...navPages.map((p) => ({ href: localizePath(lang, `/${p.slug}/`), label: p.entry.data.title })),
+  ...(profile.data.resume ? [{ href: profile.data.resume, label: t('nav.resume') }] : []),
 ];
+const current = Astro.url.pathname;
 ---
 
 <header class="container header">
-  <a href={home} class="logo">{site.handle}</a>
+  <a href={localizePath(lang, '/')} class="logo">{profile.data.name}</a>
   <nav aria-label={t('nav.mainLabel')} class="nav">
-    {items.map((item) => <a href={item.href}>{item.label}</a>)}
+    {
+      items.map((item) => (
+        <a href={item.href} aria-current={current.startsWith(item.href) ? 'page' : undefined}>
+          {item.label}
+        </a>
+      ))
+    }
     <LangSwitch lang={lang} />
   </nav>
 </header>
@@ -48,5 +57,8 @@ const items = [
     gap: 0.75rem 1.75rem;
     align-items: center;
     font-size: 0.9375rem;
+  }
+  .nav > a[aria-current='page'] {
+    color: var(--color-accent);
   }
 </style>

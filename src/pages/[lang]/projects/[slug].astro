@@ -29,7 +29,7 @@ const { Content } = await render(project.entry);
   <article class="container article">
     <a href={localizePath(lang, '/projects/')} class="back">{t('projects.back')}</a>
 
-    {project.isFallback && <p class="notice" role="note">{t('projects.fallback')}</p>}
+    {project.isFallback && <p class="notice" role="note">{t('fallback.notice')}</p>}
 
     <header class="head">
       <h1>{data.title}</h1>

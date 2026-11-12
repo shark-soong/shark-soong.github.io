@@ -55,7 +55,12 @@ p {
   padding-inline: var(--gutter);
 }
 
-/* 섹션 라벨 (About, Selected Projects ...) */
+/* 홈 마지막 섹션은 아래 구분선 없음 (푸터 선과 겹치지 않게) */
+.container > section:last-child {
+  border-bottom: 0;
+}
+
+/* 섹션 라벨 (Recent Writing, Selected Projects ...) */
 .label {
   font-size: var(--text-sm);
   font-weight: 600;
@@ -149,6 +154,17 @@ p {
 .prose pre code {
   padding: 0;
   background: none;
+}
+.prose blockquote {
+  margin-inline: 0;
+  padding: 0.25rem 0 0.25rem 1.25rem;
+  border-left: 3px solid var(--color-border-strong);
+  color: var(--color-muted);
+}
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--color-border);
+  margin-block: 2.5em;
 }
 .prose img {
   border-radius: 12px;

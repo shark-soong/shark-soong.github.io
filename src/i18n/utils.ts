@@ -17,7 +17,20 @@ export function switchLangPath(pathname: string, target: Lang): string {
   const parts = pathname.split('/').filter(Boolean);
   if (parts[0] === '404') return localizePath(target, '/');
   if (parts.length && (langs as string[]).includes(parts[0])) parts.shift();
-  return localizePath(target, `/${parts.join('/')}${parts.length ? '/' : ''}`);
+  const last = parts.at(-1) ?? '';
+  const isFile = last.includes('.');
+  return localizePath(target, `/${parts.join('/')}${parts.length && !isFile ? '/' : ''}`);
+}
+
+/** 날짜 표기: ko "2026. 11. 12.", en "Nov 12, 2026" */
+export function formatDate(date: Date, lang: Lang, style: 'long' | 'short' = 'long'): string {
+  const locale = lang === 'ko' ? 'ko-KR' : 'en-US';
+  return new Intl.DateTimeFormat(locale, {
+    year: 'numeric',
+    month: style === 'long' ? (lang === 'ko' ? 'long' : 'short') : '2-digit',
+    day: style === 'long' ? 'numeric' : '2-digit',
+    timeZone: 'Asia/Seoul',
+  }).format(date);
 }
 
 /** 콘텐츠 id("ko/my-project")를 언어와 slug로 분리 */
@@ -28,40 +41,63 @@ export function splitId(id: string): { lang: Lang; slug: string } {
 
 export async function getProfile(lang: Lang) {
   const entry = (await getEntry('profile', lang)) ?? (await getEntry('profile', defaultLang));
-  if (!entry) throw new Error('src/content/profile/ko.yaml 파일이 필요합니다.');
-  return entry.data;
+  if (!entry) throw new Error('src/content/profile/ko.md 파일이 필요합니다.');
+  return entry;
 }
 
-export type LocalizedProject = {
+type Localizable = 'projects' | 'writing' | 'pages';
+
+export type Localized<C extends Localizable> = {
   slug: string;
-  entry: CollectionEntry<'projects'>;
-  /** 이 언어 번역이 없어 기본 언어 원문을 대신 보여주는 경우 true */
+  entry: CollectionEntry<C>;
+  /** 이 언어 번역이 없어 기본 언어(한국어) 원문을 대신 보여주는 경우 true */
   isFallback: boolean;
+  /** 실제 콘텐츠의 언어 */
+  contentLang: Lang;
 };
+export type LocalizedProject = Localized<'projects'>;
+export type LocalizedPost = Localized<'writing'>;
 
 /**
- * 해당 언어의 프로젝트 목록. 번역이 없는 프로젝트는 기본 언어(한국어) 원문으로 채웁니다.
- * 정렬: date 최신순 → order 큰 순 → 제목순
+ * 해당 언어의 콘텐츠 목록. 번역이 없는 항목은 기본 언어(한국어) 원문으로 채웁니다.
+ * draft: true 인 항목은 빠집니다.
  */
-export async function getProjects(lang: Lang): Promise<LocalizedProject[]> {
-  const all = await getCollection('projects', ({ data }) => !data.draft);
-  const bySlug = new Map<string, Partial<Record<Lang, CollectionEntry<'projects'>>>>();
+export async function getLocalized<C extends Localizable>(collection: C, lang: Lang): Promise<Localized<C>[]> {
+  const all = (await getCollection(collection)) as CollectionEntry<C>[];
+  const bySlug = new Map<string, Partial<Record<Lang, CollectionEntry<C>>>>();
   for (const entry of all) {
+    if ('draft' in entry.data && entry.data.draft) continue;
     const { lang: l, slug } = splitId(entry.id);
     bySlug.set(slug, { ...bySlug.get(slug), [l]: entry });
   }
-  const result: LocalizedProject[] = [];
+  const result: Localized<C>[] = [];
   for (const [slug, versions] of bySlug) {
     const entry = versions[lang] ?? versions[defaultLang] ?? Object.values(versions)[0];
-    if (entry) result.push({ slug, entry, isFallback: !versions[lang] });
+    if (entry) result.push({ slug, entry, isFallback: !versions[lang], contentLang: splitId(entry.id).lang });
   }
-  return result.sort((a, b) => {
+  return result;
+}
+
+/** 프로젝트: date 최신순 → order 큰 순 → 제목순 */
+export async function getProjects(lang: Lang): Promise<LocalizedProject[]> {
+  const items = await getLocalized('projects', lang);
+  return items.sort((a, b) => {
     const da = a.entry.data.date?.getTime() ?? 0;
     const db = b.entry.data.date?.getTime() ?? 0;
     if (db !== da) return db - da;
     if (b.entry.data.order !== a.entry.data.order) return b.entry.data.order - a.entry.data.order;
     return a.entry.data.title.localeCompare(b.entry.data.title);
   });
+}
+
+/** 글: 발행일 최신순 */
+export async function getPosts(lang: Lang): Promise<LocalizedPost[]> {
+  const items = await getLocalized('writing', lang);
+  return items.sort((a, b) => b.entry.data.date.getTime() - a.entry.data.date.getTime());
+}
+
+export async function getPages(lang: Lang) {
+  return getLocalized('pages', lang);
 }
 
 export async function getExperience(lang: Lang) {

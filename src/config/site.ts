@@ -9,7 +9,9 @@ export const site = {
   repoUrl: 'https://github.com/shark-soong/shark-soong.github.io',
   /** 홈 화면에 노출할 대표 프로젝트 최대 개수 (featured: true 우선, 부족하면 최신순으로 채움) */
   featuredLimit: 3,
-  homeSections: ['hero', 'about', 'projects', 'experience', 'contact'] as const,
+  /** 홈 화면에 노출할 최근 글 개수 */
+  recentPostsLimit: 5,
+  homeSections: ['intro', 'writing', 'projects', 'experience'] as const,
 };
 
 export type SectionName = (typeof site.homeSections)[number];

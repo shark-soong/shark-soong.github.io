@@ -1,0 +1,113 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { langs, type Lang } from '@/i18n/ui';
+import { formatDate, getPosts, localizePath, useTranslations, type LocalizedPost } from '@/i18n/utils';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const lang of langs) {
+    for (const post of await getPosts(lang)) {
+      paths.push({ params: { lang, slug: post.slug }, props: { post } });
+    }
+  }
+  return paths;
+}
+
+interface Props {
+  post: LocalizedPost;
+}
+const lang = Astro.params.lang as Lang;
+const t = useTranslations(lang);
+const { post } = Astro.props;
+const { data } = post.entry;
+const { Content } = await render(post.entry);
+const contentLang = post.isFallback ? post.contentLang : undefined;
+---
+
+<BaseLayout lang={lang} title={data.title} description={data.description} type="article">
+  <article class="container article">
+    <a href={localizePath(lang, '/writing/')} class="back">{t('writing.back')}</a>
+
+    {post.isFallback && <p class="notice" role="note">{t('fallback.notice')}</p>}
+
+    <header class="head" lang={contentLang}>
+      <p class="meta" lang={lang}>
+        <time datetime={data.date.toISOString()}>{formatDate(data.date, lang)}</time>
+        {
+          data.updated && (
+            <span>
+              {' · '}
+              {t('writing.updated')} <time datetime={data.updated.toISOString()}>{formatDate(data.updated, lang)}</time>
+            </span>
+          )
+        }
+      </p>
+      <h1>{data.title}</h1>
+      <p class="desc">{data.description}</p>
+      {data.tags.length > 0 && <div class="tags">{data.tags.map((tag) => <span class="tag">{tag}</span>)}</div>}
+    </header>
+
+    {data.cover && <Image src={data.cover} alt="" class="cover" widths={[720, 1120]} sizes="(max-width: 1120px) 100vw, 1120px" />}
+
+    <div class="prose" lang={contentLang}>
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .article {
+    padding-bottom: var(--section-y);
+  }
+  .back {
+    display: inline-block;
+    margin-top: 2rem;
+    font-size: 0.9375rem;
+    color: var(--color-muted);
+  }
+  .notice {
+    margin-top: 1.5rem;
+    padding: 0.875rem 1.125rem;
+    border-radius: 12px;
+    background: var(--color-chip);
+    font-size: var(--text-sm);
+    color: var(--color-text-soft);
+  }
+  .head {
+    max-width: 44rem;
+    padding-block: 3.5rem 2.5rem;
+  }
+  .meta {
+    font-size: 0.9375rem;
+    color: var(--color-muted);
+  }
+  h1 {
+    margin-top: 1rem;
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+  }
+  .desc {
+    margin-top: 1.25rem;
+    font-size: var(--text-lg);
+    color: var(--color-text-soft);
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+  .cover {
+    width: 100%;
+    margin-bottom: 2.5rem;
+    border-radius: 16px;
+  }
+  .prose {
+    max-width: 44rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+  }
+</style>
