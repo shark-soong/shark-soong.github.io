@@ -69,7 +69,7 @@ const projects = defineCollection({
 const experience = defineCollection({
   loader: glob({ base: './src/content/experience', pattern: '**/[^_]*.{yaml,yml}' }),
   schema: z.object({
-    kind: z.enum(['education', 'work', 'activity', 'award']),
+    kind: z.enum(['education', 'work', 'military', 'activity', 'award']),
     org: z.string(), // 학교·회사·기관명
     role: z.string(), // 전공·직무·역할
     start: z.string(), // 예: "2023.03"

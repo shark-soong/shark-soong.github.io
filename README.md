@@ -91,7 +91,7 @@ repo: https://github.com/shark-soong/...
 `src/content/experience/ko/<이름>.yaml` (영어는 `en/`):
 
 ```yaml
-kind: work          # education | work | activity | award
+kind: work          # education | work | military | activity | award
 org: 회사·기관명
 role: 역할
 start: "2026.07"

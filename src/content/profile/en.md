@@ -11,6 +11,6 @@ links:
 # resume: /resume/SoongWe-Lee-Resume.pdf
 ---
 
-I'm an Electrical and Computer Engineering (ECE) student at Ajou University in South Korea. [What you're interested in — the kinds of problems you like to work on.]
+I'm an Electrical and Computer Engineering (ECE) student at Ajou University in South Korea, interested in AI and semiconductors.
 
 Right now I'm [what you're working on]. I keep the things I build under [projects](/en/projects/) and the things I learn under [writing](/en/writing/).
