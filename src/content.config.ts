@@ -57,14 +57,14 @@ const projects = defineCollection({
     z.object({
       title: z.string(),
       summary: z.string(), // 목록에 보이는 한 줄 설명
-      date: z.coerce.date().optional(), // 정렬 기준 (최근순)
-      period: z.string().optional(), // 화면에 보이는 기간. 예: "2025.03 – 2025.06"
-      role: z.string().optional(), // 예: "개인 프로젝트", "팀 리드 (4인)"
-      tags: z.array(z.string()).default([]),
+      date: z.preprocess(blankToUndefined, z.coerce.date().optional()), // 정렬 기준 (최근순)
+      period: z.preprocess(blankToUndefined, z.string().optional()), // 화면에 보이는 기간. 예: "2025.03 – 2025.06"
+      role: z.preprocess(blankToUndefined, z.string().optional()), // 예: "개인 프로젝트", "팀 리드 (4인)"
+      tags: z.preprocess((v) => v ?? [], z.array(z.string())).default([]),
       featured: z.boolean().default(false), // true면 홈 화면에 노출
       order: z.number().default(0), // 같은 날짜일 때 우선순위 (클수록 위)
-      repo: z.url().optional(),
-      demo: z.url().optional(),
+      repo: z.preprocess(blankToUndefined, z.url().optional()),
+      demo: z.preprocess(blankToUndefined, z.url().optional()),
       thumbnail: image().optional(),
       draft: z.boolean().default(false),
     }),
@@ -89,8 +89,8 @@ const pages = defineCollection({
   loader: md('pages'),
   schema: z.object({
     title: z.string(),
-    description: z.string().optional(),
-    updated: z.coerce.date().optional(), // "마지막 업데이트" 표시
+    description: z.preprocess(blankToUndefined, z.string().optional()),
+    updated: z.preprocess(blankToUndefined, z.coerce.date().optional()), // "마지막 업데이트" 표시
     nav: z.boolean().default(false), // true면 상단 메뉴에 표시
     navOrder: z.number().default(0),
   }),
@@ -98,20 +98,20 @@ const pages = defineCollection({
 
 /**
  * 이력 (연도별 활동 기록). 파일 하나 = 활동 하나: src/content/history/<언어>/<이름>.yaml
- * 형식은 src/content/history/ko/_template.yaml 참고. /<언어>/history/ 페이지에 연도별로 나옵니다.
+ * 형식은 docs/templates/history.yaml 참고 (사이트 /admin/ 에서 편집하는 것을 권장). /<언어>/history/ 페이지에 연도별로 나옵니다.
  */
 const history = defineCollection({
   loader: glob({ base: './src/content/history', pattern: '**/[^_]*.{yaml,yml}' }),
   schema: z.object({
     year: z.number(), // 학년도 (3월~이듬해 2월)
-    stage: z.string().optional(), // 연도 옆 설명. 예: "4학년", "군 휴학"
+    stage: z.preprocess(blankToUndefined, z.string().optional()), // 연도 옆 설명. 예: "4학년", "군 휴학"
     title: z.string(),
     category: z.string(), // 구분. 예: 교육, 실습, 현장실습, 공모전·대회
     period: z.string(),
     method: z.enum(['ppcs', 'star', 'pending']).default('pending'), // 성과-문제-원인-해결 / STAR / 정리 예정
     order: z.number().default(0), // 같은 해 안의 순서 (작을수록 먼저)
-    summary: z.string().optional(), // "[머리말]" 줄 + "- 항목" 줄
-    feelings: z.string().optional(), // 느낀점
+    summary: z.preprocess(blankToUndefined, z.string().optional()), // "[머리말]" 줄 + "- 항목" 줄
+    feelings: z.preprocess(blankToUndefined, z.string().optional()), // 느낀점
   }),
 });
 

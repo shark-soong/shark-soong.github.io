@@ -64,20 +64,23 @@ tags: [astro, 회고]
 공개된 글이 하나도 없으면 홈의 글 섹션은 자동으로 숨겨집니다.
 RSS: `/ko/rss.xml`, `/en/rss.xml`
 
-### 사이트에서 바로 글 쓰기 (/admin)
+### 사이트에서 바로 쓰고 고치기 (/admin)
 
-https://shark-soong.github.io/admin/ 에서 브라우저로 글을 쓰고 저장하면 `main`에 바로 커밋되고 자동 배포됩니다 ([Sveltia CMS](https://github.com/sveltia/sveltia-cms), 설정은 `public/admin/config.yml`).
+https://shark-soong.github.io/admin/ 에서 **글 · 프로젝트 · 이력 · Now**를 브라우저로 쓰고 고칠 수 있습니다. 저장하면 `main`에 바로 커밋되고 1~2분 뒤 사이트에 반영됩니다 ([Sveltia CMS](https://github.com/sveltia/sveltia-cms), 설정은 `public/admin/config.yml`).
 
-처음 한 번만 토큰을 만듭니다.
-
-1. GitHub → Settings → Developer settings → Personal access tokens → **Fine-grained tokens** → Generate new token
-2. Repository access: **Only select repositories** → `shark-soong.github.io`
-3. Permissions → Repository permissions → **Contents: Read and write**
-4. `/admin/`에서 **Sign in with Token**을 누르고 토큰을 붙여 넣기 (토큰은 그 브라우저에만 저장됨)
-
+- 한 번 로그인한 브라우저에서는 글·프로젝트·Now 페이지와 이력 항목마다 **✎ 수정** 버튼이 보이고, 누르면 그 항목의 편집 화면이 바로 열립니다. 다른 방문자에게는 보이지 않습니다. (로그인 전에도 주소 끝에 `?edit`을 붙이면 보입니다.)
 - 한국어가 기본이고, 영어는 편집 화면에서 언어를 바꿔 쓰면 같은 파일 이름으로 `en/`에 저장됩니다. 영어를 안 써도 됩니다.
-- 본문 이미지는 `public/images/uploads/`에 올라갑니다.
-- '초안'을 켜두면 사이트에 나오지 않습니다.
+- 본문 이미지는 `public/images/uploads/`에 올라갑니다. '초안'을 켜두면 사이트에 나오지 않습니다.
+
+#### 로그인용 토큰 만들기 (처음 한 번)
+
+1. https://github.com/settings/personal-access-tokens/new 를 엽니다.
+   (직접 찾아가려면: GitHub 오른쪽 위 프로필 사진 → **Settings** → 왼쪽 메뉴 맨 아래 **Developer settings** → **Personal access tokens** → **Fine-grained tokens** → **Generate new token**)
+2. **Token name**: 아무 이름 (예: `site-admin`). **Expiration**: 원하는 기간 (만료되면 같은 방법으로 다시 만들면 됩니다).
+3. **Repository access**: **Only select repositories** → `shark-soong/shark-soong.github.io` 하나만 선택.
+4. **Permissions**: **Repository permissions**(또는 **Add permissions**)에서 **Contents**를 찾아 **Read and write**로 바꿉니다. (Metadata: Read-only는 자동으로 붙습니다.)
+5. 맨 아래 **Generate token** → 나온 토큰(`github_pat_...`)을 바로 복사합니다. 이 화면을 닫으면 다시 볼 수 없습니다.
+6. `/admin/`에서 **Sign In Using Access Token**(토큰으로 로그인)을 누르고 붙여 넣습니다. "Sign In with GitHub" 버튼은 별도 인증 서버가 필요해서 이 사이트에서는 쓰지 않습니다.
 
 ### 새 프로젝트 추가
 
@@ -139,7 +142,7 @@ description: 한 줄 설명 (선택)
 
 ### 이력 추가·수정 (/ko/history/)
 
-`src/content/history/ko/_template.yaml`을 복사해 파일 이름 맨 앞의 `_`를 빼고 채웁니다. 파일 하나가 활동 하나이고, 페이지에서는 학년도(3월~이듬해 2월)별로 묶여 최신 연도부터 보입니다.
+**`/admin/` → 이력**에서 추가·수정하는 것이 가장 쉽습니다. 파일로 직접 만들려면 `docs/templates/history.yaml`을 `src/content/history/ko/<이름>.yaml`로 복사해 채웁니다. 파일 하나가 활동 하나이고, 페이지에서는 학년도(3월~이듬해 2월)별로 묶여 최신 연도부터 보입니다.
 
 - `method`: `ppcs`(성과-문제-원인-해결), `star`(STAR), `pending`(정리 예정 — 제목·기간만 보임)
 - `summary`: `[성과]`, `[S]` 같은 머리말 줄 다음에 `- 항목`을 적습니다. 머리말은 자유롭게 써도 됩니다(`[기타]`, `[한계]` 등). 항목이 없는 머리말은 화면에 나오지 않습니다.

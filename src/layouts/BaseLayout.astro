@@ -55,5 +55,17 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       <slot />
     </main>
     <Footer lang={lang} />
+    <script is:inline>
+      // "수정" 버튼(EditLink): /admin/ 에 로그인한 브라우저이거나 주소에 ?edit 가 있을 때만 보이게
+      (function () {
+        try {
+          var show = /[?&]edit\b/.test(location.search);
+          for (var i = 0; !show && i < localStorage.length; i++) {
+            if ((localStorage.key(i) || '').toLowerCase().indexOf('sveltia') !== -1) show = true;
+          }
+          if (show) document.querySelectorAll('[data-edit-link]').forEach(function (el) { el.hidden = false; });
+        } catch (e) {}
+      })();
+    </script>
   </body>
 </html>

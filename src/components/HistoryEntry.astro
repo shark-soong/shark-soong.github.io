@@ -7,6 +7,7 @@
 import type { Lang } from '@/i18n/ui';
 import { useTranslations, type Localized } from '@/i18n/utils';
 import { displayLabel, parseNotes } from '@/lib/notes';
+import EditLink from '@/components/EditLink.astro';
 
 interface Props {
   lang: Lang;
@@ -25,6 +26,7 @@ const contentLang = item.isFallback ? item.contentLang : undefined;
     <span class="cat" lang={contentLang}>{data.category}</span>
     <span class="period" lang={contentLang}>{data.period}</span>
     {!pending && <span class="method">{t(data.method === 'star' ? 'history.method.star' : 'history.method.ppcs')}</span>}
+    <EditLink lang={lang} collection="history" entry={item.slug} contentLang={item.contentLang} size="sm" />
   </p>
   <h3>{data.title}</h3>
 

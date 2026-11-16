@@ -2,6 +2,7 @@
 /** 단독 페이지: src/content/pages/<언어>/<slug>.md → /<언어>/<slug>/ (예: /ko/now/) */
 import { render } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import EditLink from '@/components/EditLink.astro';
 import { langs, type Lang } from '@/i18n/ui';
 import { formatDate, getPages, useTranslations, type Localized } from '@/i18n/utils';
 
@@ -38,6 +39,7 @@ const contentLang = page.isFallback ? page.contentLang : undefined;
           </p>
         )
       }
+      <EditLink lang={lang} collection="pages" entry={page.slug} contentLang={page.contentLang} />
     </header>
     <div class="prose" lang={contentLang}>
       <Content />

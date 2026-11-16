@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import { render } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import EditLink from '@/components/EditLink.astro';
 import { langs, type Lang } from '@/i18n/ui';
 import { getProjects, localizePath, useTranslations, type LocalizedProject } from '@/i18n/utils';
 
@@ -59,6 +60,7 @@ const { Content } = await render(project.entry);
           {data.demo && <a href={data.demo} class="btn btn--solid">{t('projects.demo')} ↗</a>}
         </div>
       </div>
+      <EditLink lang={lang} collection="projects" entry={project.slug} contentLang={project.contentLang} />
     </header>
 
     {data.thumbnail && <Image src={data.thumbnail} alt="" class="thumb" widths={[720, 1120]} sizes="(max-width: 1120px) 100vw, 1120px" />}

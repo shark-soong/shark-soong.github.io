@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import { render } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import EditLink from '@/components/EditLink.astro';
 import { langs, type Lang } from '@/i18n/ui';
 import { formatDate, getPosts, localizePath, useTranslations, type LocalizedPost } from '@/i18n/utils';
 
@@ -47,6 +48,7 @@ const contentLang = post.isFallback ? post.contentLang : undefined;
       <h1>{data.title}</h1>
       <p class="desc">{data.description}</p>
       {data.tags.length > 0 && <div class="tags">{data.tags.map((tag) => <span class="tag">{tag}</span>)}</div>}
+      <EditLink lang={lang} collection="writing" entry={post.slug} contentLang={post.contentLang} />
     </header>
 
     {data.cover && <Image src={data.cover} alt="" class="cover" widths={[720, 1120]} sizes="(max-width: 1120px) 100vw, 1120px" />}
