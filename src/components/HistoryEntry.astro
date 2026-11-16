@@ -1,0 +1,154 @@
+---
+/**
+ * 이력 한 항목: 구분·기간 → 제목 → 개조식 정리(머리말별) → 느낀점.
+ * 내용은 src/content/history/<언어>/*.yaml 에서 옵니다.
+ * method: pending 인 항목은 제목과 기간만 보이고 "정리 예정"으로 표시됩니다.
+ */
+import type { Lang } from '@/i18n/ui';
+import { useTranslations, type Localized } from '@/i18n/utils';
+import { displayLabel, parseNotes } from '@/lib/notes';
+
+interface Props {
+  lang: Lang;
+  item: Localized<'history'>;
+}
+const { lang, item } = Astro.props;
+const t = useTranslations(lang);
+const { data } = item.entry;
+const pending = data.method === 'pending';
+const sections = pending ? [] : parseNotes(data.summary);
+const contentLang = item.isFallback ? item.contentLang : undefined;
+---
+
+<li class="entry" lang={contentLang}>
+  <p class="meta" lang={lang}>
+    <span class="cat" lang={contentLang}>{data.category}</span>
+    <span class="period" lang={contentLang}>{data.period}</span>
+    {!pending && <span class="method">{t(data.method === 'star' ? 'history.method.star' : 'history.method.ppcs')}</span>}
+  </p>
+  <h3>{data.title}</h3>
+
+  {pending && <p class="pending" lang={lang}>{t('history.pending')}</p>}
+
+  {
+    sections.length > 0 && (
+      <dl class="notes">
+        {sections.map((s) => (
+          <div class="note">
+            {s.label && <dt>{displayLabel(s.label, lang)}</dt>}
+            <dd>
+              <ul>
+                {s.items.map((it) => (
+                  <li>{it}</li>
+                ))}
+              </ul>
+            </dd>
+          </div>
+        ))}
+      </dl>
+    )
+  }
+
+  {
+    data.feelings?.trim() && (
+      <blockquote class="feelings">
+        <p class="feelings-label" lang={lang}>
+          {t('history.feelings')}
+        </p>
+        <p class="feelings-text">{data.feelings.trim()}</p>
+      </blockquote>
+    )
+  }
+</li>
+
+<style>
+  .entry {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-block: 2.5rem;
+    border-top: 1px solid var(--color-border);
+  }
+  .entry:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem 0.75rem;
+    align-items: center;
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .cat {
+    padding: 0.125rem 0.625rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-pill);
+    color: var(--color-text-soft);
+  }
+  .method {
+    font-size: var(--text-xs);
+  }
+  .method::before {
+    content: '· ';
+  }
+  h3 {
+    font-size: 1.375rem;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  .pending {
+    font-size: 0.9375rem;
+    color: var(--color-muted);
+  }
+  .notes {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 0.5rem 0 0;
+  }
+  dt {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--color-accent);
+  }
+  dd {
+    margin: 0.25rem 0 0;
+  }
+  ul {
+    margin: 0;
+    padding-left: 1.125rem;
+    font-size: 0.9875rem;
+    line-height: 1.75;
+    color: var(--color-text-soft);
+  }
+  li + li {
+    margin-top: 0.125rem;
+  }
+  ul li::marker {
+    color: var(--color-border-strong);
+  }
+  .feelings {
+    margin: 0.75rem 0 0;
+    padding: 1rem 1.25rem;
+    border-left: 3px solid var(--color-accent);
+    background: var(--color-chip);
+    border-radius: 0 8px 8px 0;
+  }
+  .feelings-label {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-muted);
+  }
+  .feelings-text {
+    margin-top: 0.375rem;
+    font-size: 0.9875rem;
+    line-height: 1.75;
+    white-space: pre-line;
+  }
+</style>

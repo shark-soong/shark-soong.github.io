@@ -1,0 +1,21 @@
+year: 2026
+stage: "4학년"
+title: "CTF 메모리 소자 공정 및 측정 실습 (Flash Memory)"
+category: "실습"
+period: "2026.10.30 – 2026.10.31"
+method: ppcs
+order: 200
+summary: |
+  [성과]
+  - ZrO₂ ALD(TEMAZ/H₂O, 230°C, 50 cycle) → 포토(DNR negative PR, 지름 140 µm) → Al E-beam 증착·Lift-off 직접 진행
+  - 엘립소미터 5지점 측정: 평균 5.55 nm (목표 5 nm)
+  - CTF 소자(Al₂O₃/ZrO₂/Al₂O₃) 20 V 프로그램 후 Vt 2.5 → 7.5 V, 메모리 윈도우 5 V
+  [문제]
+  - 1번 소자가 20 V 프로그램 단계에서 breakdown
+  - ALD 두께가 목표보다 약 11% 두껍고 균일도 ±13.6%로 큼
+  [원인]
+  - 절연막 파괴로 누설 전류 발생 (C-V 반전 영역 용량이 다시 상승)
+  - 5 nm급 박막은 엘립소미터 모델 오차에 민감, 웨이퍼·가스 유입 방향 기록이 없어 판단 어려움
+  [해결]
+  - 2번 소자로 교체, 20 V까지만 프로그램해 breakdown 없이 측정
+  - 기록값으로 GPC 1.11 Å/cycle, EOT 약 6.3 nm, 트랩 전자 밀도 약 2.5×10¹³ cm⁻²를 계산해 적층 기록과 일관성 확인

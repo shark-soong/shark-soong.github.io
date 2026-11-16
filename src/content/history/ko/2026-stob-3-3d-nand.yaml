@@ -1,0 +1,23 @@
+year: 2026
+stage: "4학년"
+title: "STOB리그 3회 · 2026 STOB리그 (삼고초려 팀)"
+category: "공모전·대회"
+period: "4학년 여름방학"
+method: ppcs
+order: 160
+summary: |
+  [성과]
+  - 공정·소자 7번 문제(고단 3D NAND)에서 공정·소자 통합 개선안 제시 (4인 팀, 2024 Mr. DRAM과 같은 멤버)
+  - 공정: 희생 산화막 증착·식각 시뮬레이션으로 100-pair 채널 홀 CD spread 16.58 → 4.276 nm (74.2% 축소)
+  - 소자: HZO 10 nm 삽입 시 10년 retention loss 98.2% 감소, program voltage 11.239 → 8.953 V (20.3% 감소)
+  [문제]
+  - 300단 이상 3D NAND: bulk erase 불가, 260 ℃ reflow 전하 손실, P/E cycling 열화, 고단 적층에 따른 string current 저하·WL RC delay
+  [원인]
+  - CuA 구조로 채널과 P-well이 물리적으로 단절 → hole 공급 불가 (GIDL-assisted erase 필요)
+  - reflow 후 TAT·lateral migration, erase hot-hole에 의한 Si-H 해리와 deep trap 누적
+  - 채널 홀 taper(상단 99.87 nm / 하단 82.59 nm)로 층별 CD 불균일
+  [해결]
+  - 101개 조건 탐색 → STICKING 0.0005, PAR_FOCUS 2.0, TIME 0.14 채택, 20-pair에서 찾고 100-pair에서 재현 확인
+  - HZO/Al₂O₃ blocking stack 두께 스윕 → 10~12.5 nm를 후보 구간으로 도출 (Al₂O₃ 전계 증가 trade-off 명시)
+  [한계]
+  - 시뮬레이션 기반, FE 모델은 분극을 고정 전하로 등가화 → 실제 DOE·신뢰성 검증 필요

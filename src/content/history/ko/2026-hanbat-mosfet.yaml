@@ -1,0 +1,20 @@
+year: 2026
+stage: "4학년"
+title: "한밭대 반도체 소자 특성평가 실습 (1차, MOSFET)"
+category: "교육"
+period: "2026.07.09 – 2026.07.10"
+method: ppcs
+order: 130
+summary: |
+  [성과]
+  - 한밭대·아주대 공동 비교과 프로그램, Keithley 4200A-SCS + 수동 Probe Station(MST 8000)으로 직접 probing
+  - Ring-gate n-MOSFET(L 5µm / W 80µm) transfer·output 측정 후 파라미터 추출: SS 약 206 mV/dec, DIBL 약 75 mV/V, I_on/I_off 약 2.5×10⁶ (V_D 1 V)
+  - V_DSAT(0.9 / 1.9 / 3.2 V)이 V_G − V_th와 최대 0.22 V 차이로 일치함을 확인
+  - 개인 발표자료 9장 작성
+  [문제]
+  - V_D 0.05 V에서 V_G 1 V 이상인데도 전류가 약 41 µA에서 더 오르지 않음 (선형 영역인데 포화)
+  [원인]
+  - 채널이 아니라 약 1.2 kΩ의 직렬저항(프로브 접촉저항·S/D 저항)이 전류를 제한
+  [해결]
+  - 원시 데이터 재계산으로 원인 확인 → 저항은 4단자 측정이 필요한 이유로 정리
+  - DIBL 중 약 14 mV/V는 측정 조건(V_D 0.05 V) 영향 → 보정하면 약 60 mV/V

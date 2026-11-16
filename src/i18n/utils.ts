@@ -45,7 +45,7 @@ export async function getProfile(lang: Lang) {
   return entry;
 }
 
-type Localizable = 'projects' | 'writing' | 'pages';
+type Localizable = 'projects' | 'writing' | 'pages' | 'history';
 
 export type Localized<C extends Localizable> = {
   slug: string;
@@ -94,6 +94,26 @@ export async function getProjects(lang: Lang): Promise<LocalizedProject[]> {
 export async function getPosts(lang: Lang): Promise<LocalizedPost[]> {
   const items = await getLocalized('writing', lang);
   return items.sort((a, b) => b.entry.data.date.getTime() - a.entry.data.date.getTime());
+}
+
+/**
+ * 이력: 학년도별로 묶어 최신 연도부터, 같은 해 안에서는 order 큰 순(최근 일 먼저).
+ * 번역이 없는 항목은 한국어 원문으로 채웁니다.
+ */
+export async function getHistoryByYear(lang: Lang) {
+  const items = await getLocalized('history', lang);
+  const years = new Map<number, Localized<'history'>[]>();
+  for (const item of items) {
+    const y = item.entry.data.year;
+    years.set(y, [...(years.get(y) ?? []), item]);
+  }
+  return [...years.entries()]
+    .sort((a, b) => b[0] - a[0])
+    .map(([year, list]) => ({
+      year,
+      stage: list.find((i) => i.entry.data.stage)?.entry.data.stage,
+      items: list.sort((a, b) => b.entry.data.order - a.entry.data.order),
+    }));
 }
 
 export async function getPages(lang: Lang) {

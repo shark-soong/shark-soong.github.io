@@ -1,0 +1,22 @@
+year: 2025
+stage: "3학년"
+title: "STOB리그 2회 · 2025 반도체 솔버톤 경진대회 (반도체맛 픽셀 팀)"
+category: "공모전·대회"
+period: "2025.07 – 2025.08 (3학년 여름방학)"
+method: ppcs
+order: 100
+summary: |
+  [성과]
+  - 5번 문제 '이미지 센서 수율 향상을 위한 Defect 처리 기법' 보고서 제출
+  - Quad Bayer 맞춤 Bad Pixel 검출·보정 알고리즘 제안: 일반 Median Filter 대비 PSNR 29.74 → 38.78 dB, SSIM 0.9378 → 0.9916
+  - AI 보정 방안(ViT Auto-Encoder + CNN 결합) 제시
+  - 결과: 예선 탈락
+  [문제]
+  - 팀원으로 참여했으나 예선 통과 못 함
+  [원인]
+  - 준비 부족, 문제를 정확하게 이해하지 못한 채 진행
+  - (문제지와 대조) 문제가 요구한 Dynamic/Static Bad Pixel 구분, 알고리즘 복잡도 분석, KODAK DB 기반 화질 평가가 보고서에 없음
+  [해결]
+  - 다음엔 문제를 정확히 이해하고 준비하기로 함 → 2026 STOB리그 3회 재참가
+feelings: |
+  문제를 정확하게 이해하고 준비할 것

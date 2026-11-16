@@ -18,6 +18,7 @@ const navPages = (await getPages(lang))
 const items = [
   { href: localizePath(lang, '/writing/'), label: t('nav.writing') },
   { href: localizePath(lang, '/projects/'), label: t('nav.projects') },
+  { href: localizePath(lang, '/history/'), label: t('nav.history') },
   ...navPages.map((p) => ({ href: localizePath(lang, `/${p.slug}/`), label: p.entry.data.title })),
   ...(profile.data.resume ? [{ href: profile.data.resume, label: t('nav.resume') }] : []),
 ];

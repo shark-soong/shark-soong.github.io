@@ -1,0 +1,24 @@
+year: 2024
+stage: "2학년"
+title: "STOB리그 1회 · 2024 반도체 솔버톤 경진대회 (Mr. DRAM 팀)"
+category: "공모전·대회"
+period: "2024.09 – 2024.12 (2-2학기)"
+method: star
+order: 70
+summary: |
+  [S]
+  - 회로·설계·시스템 3번 문제: DRAM Cell + Sense Amplifier Read/Write 동작을 '수조 모델'을 확장해 설명하고, PVT 영향과 성능·전력 개선안 제시
+  - 아주대 전자공학과 4인 팀 (2학년 3명, 3학년 1명)
+  [T]
+  - 팀장, 교수님 앞 발표와 보고서 작성
+  - Step 1 담당: DRAM Cell·SA 동작 분석, 산업 현장 적용 가능성 조사
+  [A]
+  - 기존 수조 모델의 한계(SA 설명 불가) 파악 → NMOS/PMOS를 '부표와 실로 연결된 수문'으로 표현한 확장 모델 제안
+  - PVT 변화를 모델에 반영 (Voltage → 수위, Temperature → 물 증발량·리프레시 주기)
+  - 팀원 1명이 SketchUp 3D 모델링으로 동작 영상 제작
+  - 개선안: 3D·커패시터리스 DRAM, SBW SA, 듀얼 Vt·듀얼 산화막, DIVA Profiling, 온도 보상 자가 리프레시 등
+  [R]
+  - 수상은 못 함, 유니위크 참관 (부산)
+  - 일반인도 이해할 수 있는 동작 모델 제시라는 목표 달성
+feelings: |
+  수상은 못 해도 모델을 제시하겠다는 목적은 달성했다.

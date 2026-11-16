@@ -92,4 +92,23 @@ const pages = defineCollection({
   }),
 });
 
-export const collections = { profile, writing, projects, experience, pages };
+/**
+ * 이력 (연도별 활동 기록). 파일 하나 = 활동 하나: src/content/history/<언어>/<이름>.yaml
+ * 형식은 src/content/history/ko/_template.yaml 참고. /<언어>/history/ 페이지에 연도별로 나옵니다.
+ */
+const history = defineCollection({
+  loader: glob({ base: './src/content/history', pattern: '**/[^_]*.{yaml,yml}' }),
+  schema: z.object({
+    year: z.number(), // 학년도 (3월~이듬해 2월)
+    stage: z.string().optional(), // 연도 옆 설명. 예: "4학년", "군 휴학"
+    title: z.string(),
+    category: z.string(), // 구분. 예: 교육, 실습, 현장실습, 공모전·대회
+    period: z.string(),
+    method: z.enum(['ppcs', 'star', 'pending']).default('pending'), // 성과-문제-원인-해결 / STAR / 정리 예정
+    order: z.number().default(0), // 같은 해 안의 순서 (작을수록 먼저)
+    summary: z.string().optional(), // "[머리말]" 줄 + "- 항목" 줄
+    feelings: z.string().optional(), // 느낀점
+  }),
+});
+
+export const collections = { profile, writing, projects, experience, pages, history };
