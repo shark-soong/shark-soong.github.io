@@ -1,0 +1,37 @@
+---
+/**
+ * 수상 — src/content/experience/<언어>/*.yaml 중 kind: award 인 항목을 최신순으로 보여줍니다.
+ * 항목이 하나도 없으면 섹션 전체가 숨겨집니다.
+ */
+import RecordRow from '@/components/RecordRow.astro';
+import SplitSection from '@/components/SplitSection.astro';
+import { type Lang } from '@/i18n/ui';
+import { getExperience, useTranslations } from '@/i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const items = await getExperience(lang, ['award'], 'recent');
+---
+
+{
+  items.length > 0 && (
+    <SplitSection id="awards" label={t('section.awards')}>
+      <ul class="list">
+        {items.map((item) => (
+          <RecordRow lang={lang} item={item} />
+        ))}
+      </ul>
+    </SplitSection>
+  )
+}
+
+<style>
+  .list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+</style>

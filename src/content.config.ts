@@ -75,6 +75,7 @@ const experience = defineCollection({
     start: z.string(), // 예: "2023.03"
     end: z.string().optional(), // 비워두면 "현재"
     description: z.string().optional(),
+    link: z.url().optional(), // 관련 링크 (활동·수상 제목에 걸림)
     order: z.number().default(0), // 클수록 위
   }),
 });

@@ -1,5 +1,6 @@
 ---
 import LangSwitch from './LangSwitch.astro';
+import { site } from '@/config/site';
 import { type Lang } from '@/i18n/ui';
 import { getPages, getProfile, localizePath, useTranslations } from '@/i18n/utils';
 
@@ -24,7 +25,7 @@ const current = Astro.url.pathname;
 ---
 
 <header class="container header">
-  <a href={localizePath(lang, '/')} class="logo">{profile.data.name}</a>
+  <a href={localizePath(lang, '/')} class="logo">{site.brand}</a>
   <nav aria-label={t('nav.mainLabel')} class="nav">
     {
       items.map((item) => (

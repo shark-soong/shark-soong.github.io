@@ -1,11 +1,13 @@
 ---
 /**
- * 타임라인 — 학력·경력·활동을 세로 선 위에 한 줄씩 보여줍니다.
+ * 타임라인 — 학력·경력을 세로 선 옆에 한 줄씩 보여줍니다.
  * 홈 첫 화면(Intro)의 오른쪽 단에 들어갑니다.
  * 항목은 src/content/experience/<언어>/*.yaml 파일 하나가 한 줄입니다.
- * end 가 없는(= 현재 진행 중인) 항목은 강조색으로 표시됩니다.
+ * 어떤 종류(kind)를 넣을지는 src/config/site.ts 의 timelineKinds 에서 정합니다.
+ * end 가 없는(= 현재 진행 중인) 항목은 기간이 강조색으로 표시됩니다.
  */
-import { type Lang, type UiKey } from '@/i18n/ui';
+import { site } from '@/config/site';
+import { type Lang } from '@/i18n/ui';
 import { getExperience, useTranslations } from '@/i18n/utils';
 
 interface Props {
@@ -13,7 +15,7 @@ interface Props {
 }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const items = await getExperience(lang);
+const items = await getExperience(lang, site.timelineKinds);
 ---
 
 <div id="experience" class="timeline">
@@ -24,16 +26,13 @@ const items = await getExperience(lang);
       {
         items.map(({ data }, i) => (
           <li class:list={['item', 'fade-up', { current: !data.end }]} style={`--delay: ${(0.3 + i * 0.15).toFixed(2)}s`}>
-            <span class="dot" aria-hidden="true" />
-            <div class="body">
-              <p class="when">
-                {data.start} — {data.end ?? t('experience.present')} · {t(`experience.kind.${data.kind}` as UiKey)}
-              </p>
-              <h3>
-                {data.org} · {data.role}
-              </h3>
-              {data.description && <p class="desc">{data.description}</p>}
-            </div>
+            <p class="when">
+              {data.start} — {data.end ?? t('experience.present')}
+            </p>
+            <h3>
+              {data.org} · {data.role}
+            </h3>
+            {data.description && <p class="desc">{data.description}</p>}
           </li>
         ))
       }
@@ -53,9 +52,9 @@ const items = await getExperience(lang);
   /* 세로 선: 처음 열 때 위에서 아래로 그려집니다 */
   .line {
     position: absolute;
-    left: 4px;
-    top: 0.75rem;
-    bottom: 0.75rem;
+    left: 0;
+    top: 0.375rem;
+    bottom: 0.375rem;
     width: 1px;
     background: var(--color-border-strong);
     transform-origin: center top;
@@ -74,25 +73,10 @@ const items = await getExperience(lang);
     flex-direction: column;
     gap: 3rem;
     margin: 0;
-    padding: 0;
+    padding: 0 0 0 2rem;
     list-style: none;
   }
   .item {
-    position: relative;
-    display: flex;
-    gap: 2rem;
-  }
-  .dot {
-    position: relative;
-    flex: 0 0 9px;
-    height: 9px;
-    margin-top: 0.5rem;
-    border-radius: 50%;
-    background: var(--color-text);
-    outline: 4px solid var(--color-bg);
-  }
-  .body {
-    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -111,9 +95,6 @@ const items = await getExperience(lang);
   .desc {
     line-height: 1.7;
     color: var(--color-text-soft);
-  }
-  .current .dot {
-    background: var(--color-accent);
   }
   .current .when {
     font-weight: 500;

@@ -100,9 +100,20 @@ export async function getPages(lang: Lang) {
   return getLocalized('pages', lang);
 }
 
-export async function getExperience(lang: Lang) {
-  const all = await getCollection('experience');
+export type ExperienceKind = CollectionEntry<'experience'>['data']['kind'];
+
+/**
+ * 학력·경력·활동·수상 항목. kinds 로 종류를 골라 가져옵니다.
+ * 해당 언어에 항목이 하나도 없으면 기본 언어(한국어) 항목을 대신 보여줍니다.
+ * sort: 'order' = order 큰 순(타임라인), 'recent' = 시작일 최신순(활동·수상)
+ */
+export async function getExperience(lang: Lang, kinds?: readonly ExperienceKind[], sort: 'order' | 'recent' = 'order') {
+  const all = (await getCollection('experience')).filter((e) => !kinds || kinds.includes(e.data.kind));
   let items = all.filter((e) => splitId(e.id).lang === lang);
   if (items.length === 0) items = all.filter((e) => splitId(e.id).lang === defaultLang);
-  return items.sort((a, b) => b.data.order - a.data.order || b.data.start.localeCompare(a.data.start));
+  return items.sort((a, b) =>
+    sort === 'recent'
+      ? b.data.start.localeCompare(a.data.start) || b.data.order - a.data.order
+      : b.data.order - a.data.order || b.data.start.localeCompare(a.data.start),
+  );
 }

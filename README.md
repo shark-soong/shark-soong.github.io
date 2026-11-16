@@ -25,14 +25,14 @@ src/
 │  ├─ profile/{ko,en}.md       ← 이름, 한 줄 소개, 링크 + 본문이 홈 소개 문단
 │  ├─ writing/{ko,en}/*.md     ← 글 1개 = 파일 1개
 │  ├─ projects/{ko,en}/*.md    ← 프로젝트 1개 = 파일 1개
-│  ├─ experience/{ko,en}/*.yaml← 학력·경력·활동 1개 = 파일 1개
+│  ├─ experience/{ko,en}/*.yaml← 학력·경력·활동·수상 1개 = 파일 1개
 │  └─ pages/{ko,en}/*.md       ← 단독 페이지 (now 등)
 ├─ content.config.ts           ← 각 콘텐츠에 들어갈 필드 정의 (스키마)
 ├─ config/site.ts              ← 홈 섹션 순서, 노출 개수
 ├─ i18n/ui.ts                  ← 메뉴·버튼 같은 고정 문구 번역
 ├─ styles/tokens.css           ← 색·글꼴·간격 (디자인 바꿀 때)
 ├─ components/                 ← 헤더, 푸터, 목록 행 등 부품
-│  └─ sections/                ← 홈 섹션 (Intro + 타임라인, Projects, Writing)
+│  └─ sections/                ← 홈 섹션 (Intro + 타임라인, Projects, Activities, Awards, Writing)
 ├─ views/HomePage.astro        ← 섹션 이름 → 컴포넌트 연결
 └─ pages/[lang]/               ← /ko/..., /en/... 경로가 자동 생성됨
 public/                        ← 그대로 복사되는 파일 (favicon, 이력서 PDF)
@@ -100,7 +100,26 @@ description: 한 일 한 줄 (선택)
 order: 20           # 클수록 위
 ```
 
-홈 첫 화면 오른쪽의 **타임라인**에 한 줄로 나타납니다. `end`가 없는(현재 진행 중인) 항목은 강조색으로 표시됩니다.
+`kind`가 `education`·`work`·`military`인 항목은 홈 첫 화면 오른쪽의 **타임라인**에 나타납니다. `end`가 없는(현재 진행 중인) 항목은 기간이 강조색으로 표시됩니다.
+
+### 대내외 활동·수상 추가
+
+같은 폴더(`src/content/experience/ko/`)에 파일을 하나 추가하되 `kind`만 다르게 씁니다.
+
+- `kind: activity` → 홈의 **활동** 섹션
+- `kind: award` → 홈의 **수상** 섹션
+
+`_activity-example.yaml`, `_award-example.yaml`을 복사해 파일 이름 맨 앞의 `_`를 빼고 내용을 채우면 됩니다. 두 섹션 모두 최신순으로 정렬되고, 항목이 하나도 없으면 섹션이 숨겨집니다.
+
+```yaml
+kind: award
+org: 대회·기관 이름      # 제목으로 크게 보임
+role: 수상 내역          # 제목 아래 한 줄
+start: "2026.05"
+end: "2026.05"          # start 와 같게 쓰면 날짜 하나만 보임
+description: 한 줄 설명 (선택)
+# link: https://...     # 제목에 걸 링크 (선택)
+```
 
 ### 홈 소개 문단 고치기
 
@@ -118,7 +137,7 @@ order: 20           # 클수록 위
 
 ### 홈 화면 섹션 순서 바꾸기 / 빼기
 
-`src/config/site.ts`의 `homeSections` 배열을 수정합니다. 타임라인은 `intro` 안에 함께 들어 있습니다.
+`src/config/site.ts`의 `homeSections` 배열을 수정합니다. 타임라인은 `intro` 안에 함께 들어 있고, 타임라인에 넣을 종류는 같은 파일의 `timelineKinds`에서 정합니다. 왼쪽 위 사이트 이름은 `brand`입니다.
 
 ### 새 섹션 만들기 (예: 수상, 발표)
 

@@ -3,6 +3,8 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Intro from '@/components/sections/Intro.astro';
 import Writing from '@/components/sections/Writing.astro';
 import Projects from '@/components/sections/Projects.astro';
+import Activities from '@/components/sections/Activities.astro';
+import Awards from '@/components/sections/Awards.astro';
 import { site, type SectionName } from '@/config/site';
 import type { Lang } from '@/i18n/ui';
 
@@ -16,6 +18,8 @@ const { lang } = Astro.props;
 const sectionMap: Record<SectionName, any> = {
   intro: Intro,
   projects: Projects,
+  activities: Activities,
+  awards: Awards,
   writing: Writing,
 };
 ---
