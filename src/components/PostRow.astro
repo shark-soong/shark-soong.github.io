@@ -10,52 +10,48 @@ interface Props {
 const { lang, post } = Astro.props;
 const t = useTranslations(lang);
 const { data } = post.entry;
+const contentLang = post.isFallback ? post.contentLang : undefined;
 ---
 
 <li class="row">
-  <a href={localizePath(lang, `/writing/${post.slug}/`)}>
+  <p class="date">
     <time datetime={data.date.toISOString()}>{formatDate(data.date, lang)}</time>
-    <span class="title" lang={post.isFallback ? post.contentLang : undefined}>
-      {data.title}
-      {post.isFallback && <span class="badge" lang={lang}>{t('fallback.badge')}</span>}
-    </span>
-  </a>
+    {post.isFallback && <span class="badge"> · {t('fallback.badge')}</span>}
+  </p>
+  <h3 lang={contentLang}><a href={localizePath(lang, `/writing/${post.slug}/`)}>{data.title}</a></h3>
+  <p class="desc" lang={contentLang}>{data.description}</p>
 </li>
 
 <style>
   .row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-block: 2.25rem;
     border-top: 1px solid var(--color-border);
   }
-  a {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.25rem 1.5rem;
-    align-items: baseline;
-    padding-block: 1.125rem;
+  .row:first-child {
+    padding-top: 0;
+    border-top: 0;
   }
-  time {
-    flex: 0 0 9rem;
-    font-size: 0.9375rem;
+  .row:last-child {
+    padding-bottom: 0;
+  }
+  .date {
+    font-size: var(--text-sm);
     color: var(--color-muted);
     font-variant-numeric: tabular-nums;
   }
-  .title {
-    flex: 1 1 20rem;
-    min-width: 0;
-    font-size: 1.1875rem;
-    font-weight: 500;
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.35;
     letter-spacing: -0.01em;
   }
-  .badge {
-    display: inline-block;
-    margin-left: 0.5rem;
-    padding: 0.125rem 0.5rem;
-    border: 1px solid var(--color-border-strong);
-    border-radius: var(--radius-pill);
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    color: var(--color-muted);
-    vertical-align: 0.2em;
+  .desc {
+    max-width: 40rem;
+    line-height: 1.7;
+    color: var(--color-text-soft);
+    text-wrap: pretty;
   }
 </style>

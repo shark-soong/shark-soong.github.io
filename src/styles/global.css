@@ -55,18 +55,63 @@ p {
   padding-inline: var(--gutter);
 }
 
-/* 홈 마지막 섹션은 아래 구분선 없음 (푸터 선과 겹치지 않게) */
-.container > section:last-child {
-  border-bottom: 0;
+/*
+ * 2단 틀 — 왼쪽(.side)에 라벨·소개, 오른쪽(.main)에 내용.
+ * 홈의 모든 섹션이 같은 비율을 써서 단이 위아래로 맞습니다. 좁은 화면에서는 위아래로 쌓입니다.
+ */
+.cols {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem var(--col-gap);
+  align-items: flex-start;
+}
+.cols > .side {
+  flex: 1 1 20rem;
+  min-width: 0;
+}
+.cols > .main {
+  flex: 1.7 1 30rem;
+  min-width: 0;
 }
 
-/* 섹션 라벨 (Recent Writing, Selected Projects ...) */
+/* 섹션 라벨 (타임라인, 프로젝트, 글 ...) */
 .label {
   font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
   color: var(--color-muted);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-head);
+}
+
+/*
+ * 모션 — 처음 열 때 살짝 떠오르는 효과 하나만 씁니다.
+ * 순서는 style="--delay: .3s" 로 조절. '동작 줄이기'를 켠 기기에서는 꺼집니다.
+ */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.fade-up {
+  animation: fade-up 0.6s ease-out both;
+  animation-delay: var(--delay, 0s);
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .fade-up {
+    animation: none;
+  }
 }
 
 .chip {

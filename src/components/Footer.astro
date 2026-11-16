@@ -9,17 +9,12 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const profile = await getProfile(lang);
-const year = new Date().getFullYear();
 ---
 
 <footer class="container">
   <div class="footer">
-    <div class="left">
-      <span>© {year} {profile.data.name}</span>
-      <SocialLinks lang={lang} links={profile.data.links} size="sm" />
-      <a href={localizePath(lang, '/rss.xml')} class="rss">{t('writing.rss')}</a>
-    </div>
-    <span>{t('footer.builtWith')}</span>
+    <SocialLinks lang={lang} links={profile.data.links} size="sm" />
+    <a href={localizePath(lang, '/rss.xml')} class="rss">{t('writing.rss')}</a>
   </div>
 </footer>
 
@@ -27,17 +22,11 @@ const year = new Date().getFullYear();
   .footer {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem 1.5rem;
-    justify-content: space-between;
+    gap: 0.5rem 1.25rem;
+    align-items: center;
     padding-block: 2rem;
     border-top: 1px solid var(--color-border);
     font-size: var(--text-sm);
     color: var(--color-muted);
-  }
-  .left {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.25rem;
-    align-items: center;
   }
 </style>

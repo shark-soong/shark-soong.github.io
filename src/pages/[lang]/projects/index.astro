@@ -20,7 +20,7 @@ const projects = await getProjects(lang);
       <p>{t('projects.pageIntro')}</p>
     </header>
     <ul class="list">
-      {projects.map((project, i) => <ProjectRow lang={lang} project={project} first={i === 0} />)}
+      {projects.map((project) => <ProjectRow lang={lang} project={project} />)}
     </ul>
   </div>
 </BaseLayout>
@@ -41,8 +41,8 @@ const projects = await getProjects(lang);
   }
   .list {
     margin: 0 0 var(--section-y);
-    padding: 0;
+    padding: 2.25rem 0 0;
     list-style: none;
-    border-bottom: 1px solid var(--color-border);
+    border-top: 1px solid var(--color-border);
   }
 </style>

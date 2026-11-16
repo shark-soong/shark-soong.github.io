@@ -1,0 +1,65 @@
+---
+/**
+ * 활동·수상 한 줄: 날짜 → 제목(org) → 내용(role) → 설명.
+ * 내용은 src/content/experience/<언어>/*.yaml 에서 옵니다.
+ * end 를 start 와 같게 쓰면 날짜 하나만 보입니다 (수상처럼 하루짜리 항목).
+ */
+import type { CollectionEntry } from 'astro:content';
+import type { Lang } from '@/i18n/ui';
+import { useTranslations } from '@/i18n/utils';
+
+interface Props {
+  lang: Lang;
+  item: CollectionEntry<'experience'>;
+}
+const { lang, item } = Astro.props;
+const t = useTranslations(lang);
+const { data } = item;
+const when = data.end === data.start ? data.start : `${data.start} — ${data.end ?? t('experience.present')}`;
+---
+
+<li class="row">
+  <p class="when">{when}</p>
+  <h3>{data.link ? <a href={data.link}>{data.org}</a> : data.org}</h3>
+  <p class="role">{data.role}</p>
+  {data.description && <p class="desc">{data.description}</p>}
+</li>
+
+<style>
+  .row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-block: 2.25rem;
+    border-top: 1px solid var(--color-border);
+  }
+  .row:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+  .row:last-child {
+    padding-bottom: 0;
+  }
+  .when {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+  }
+  .role {
+    line-height: 1.7;
+    color: var(--color-text-soft);
+  }
+  .desc {
+    max-width: 40rem;
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--color-muted);
+    text-wrap: pretty;
+  }
+</style>

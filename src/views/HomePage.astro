@@ -3,7 +3,8 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Intro from '@/components/sections/Intro.astro';
 import Writing from '@/components/sections/Writing.astro';
 import Projects from '@/components/sections/Projects.astro';
-import Experience from '@/components/sections/Experience.astro';
+import Activities from '@/components/sections/Activities.astro';
+import Awards from '@/components/sections/Awards.astro';
 import { site, type SectionName } from '@/config/site';
 import type { Lang } from '@/i18n/ui';
 
@@ -13,11 +14,13 @@ interface Props {
 const { lang } = Astro.props;
 
 // 섹션 이름 → 컴포넌트. 새 섹션을 만들면 여기에 등록하고 site.ts 의 homeSections 에 추가하세요.
+// 타임라인(Experience)은 Intro 안 오른쪽 단에 들어 있습니다.
 const sectionMap: Record<SectionName, any> = {
   intro: Intro,
-  writing: Writing,
   projects: Projects,
-  experience: Experience,
+  activities: Activities,
+  awards: Awards,
+  writing: Writing,
 };
 ---
 

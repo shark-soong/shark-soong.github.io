@@ -1,5 +1,6 @@
 ---
 import ProjectRow from '@/components/ProjectRow.astro';
+import SplitSection from '@/components/SplitSection.astro';
 import { site } from '@/config/site';
 import { type Lang } from '@/i18n/ui';
 import { getProjects, localizePath, useTranslations } from '@/i18n/utils';
@@ -15,36 +16,22 @@ const featured = [
   ...all.filter((p) => p.entry.data.featured),
   ...all.filter((p) => !p.entry.data.featured),
 ].slice(0, site.featuredLimit);
+// 홈에 다 보여주지 못한 프로젝트가 있을 때만 "전체 프로젝트 →" 링크를 답니다.
+const hasMore = all.length > featured.length;
 ---
 
-<section id="projects" class="projects">
-  <div class="head">
-    <h2 class="label">{t('section.projects')}</h2>
-    <a href={localizePath(lang, '/projects/')} class="all">{t('projects.all')}</a>
-  </div>
+<SplitSection
+  id="projects"
+  label={t('section.projects')}
+  moreHref={hasMore ? localizePath(lang, '/projects/') : undefined}
+  moreLabel={t('projects.all')}
+>
   <ul class="list">
-    {featured.map((project, i) => <ProjectRow lang={lang} project={project} first={i === 0} />)}
+    {featured.map((project) => <ProjectRow lang={lang} project={project} />)}
   </ul>
-</section>
+</SplitSection>
 
 <style>
-  .projects {
-    padding-block: var(--section-y);
-    border-bottom: 1px solid var(--color-border);
-  }
-  .head {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 2.5rem;
-  }
-  .all {
-    font-size: 0.9375rem;
-    font-weight: 600;
-    color: var(--color-accent);
-  }
   .list {
     margin: 0;
     padding: 0;
