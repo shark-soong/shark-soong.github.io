@@ -12,6 +12,9 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
+/** 빈 문자열·null 을 undefined 로 (선택 필드용) */
+const blankToUndefined = (v: unknown) => (v === '' || v === null ? undefined : v);
+
 // `_`로 시작하는 파일은 무시합니다 (임시 메모, 템플릿 등).
 const md = (dir: string) => glob({ base: `./src/content/${dir}`, pattern: '**/[^_]*.{md,mdx}' });
 
@@ -40,8 +43,9 @@ const writing = defineCollection({
       title: z.string(),
       description: z.string(), // 목록·검색·공유 미리보기에 쓰이는 한두 문장
       date: z.coerce.date(), // 발행일. 예: 2026-11-12
-      updated: z.coerce.date().optional(),
-      tags: z.array(z.string()).default([]),
+      // 관리 화면(/admin)에서 빈칸으로 저장해도 빌드가 깨지지 않도록 빈 값은 '없음'으로 처리
+      updated: z.preprocess(blankToUndefined, z.coerce.date().optional()),
+      tags: z.preprocess((v) => v ?? [], z.array(z.string())).default([]),
       cover: image().optional(),
       draft: z.boolean().default(false), // true면 사이트·RSS에 나오지 않음
     }),

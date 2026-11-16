@@ -64,6 +64,21 @@ tags: [astro, 회고]
 공개된 글이 하나도 없으면 홈의 글 섹션은 자동으로 숨겨집니다.
 RSS: `/ko/rss.xml`, `/en/rss.xml`
 
+### 사이트에서 바로 글 쓰기 (/admin)
+
+https://shark-soong.github.io/admin/ 에서 브라우저로 글을 쓰고 저장하면 `main`에 바로 커밋되고 자동 배포됩니다 ([Sveltia CMS](https://github.com/sveltia/sveltia-cms), 설정은 `public/admin/config.yml`).
+
+처음 한 번만 토큰을 만듭니다.
+
+1. GitHub → Settings → Developer settings → Personal access tokens → **Fine-grained tokens** → Generate new token
+2. Repository access: **Only select repositories** → `shark-soong.github.io`
+3. Permissions → Repository permissions → **Contents: Read and write**
+4. `/admin/`에서 **Sign in with Token**을 누르고 토큰을 붙여 넣기 (토큰은 그 브라우저에만 저장됨)
+
+- 한국어가 기본이고, 영어는 편집 화면에서 언어를 바꿔 쓰면 같은 파일 이름으로 `en/`에 저장됩니다. 영어를 안 써도 됩니다.
+- 본문 이미지는 `public/images/uploads/`에 올라갑니다.
+- '초안'을 켜두면 사이트에 나오지 않습니다.
+
 ### 새 프로젝트 추가
 
 `src/content/projects/ko/<프로젝트-이름>.md`:
