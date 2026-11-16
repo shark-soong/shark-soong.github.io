@@ -1,5 +1,5 @@
 ---
-import { langs, type Lang } from '@/i18n/ui';
+import { languages, langs, type Lang } from '@/i18n/ui';
 import { switchLangPath, useTranslations } from '@/i18n/utils';
 
 interface Props {
@@ -11,15 +11,13 @@ const t = useTranslations(lang);
 
 <div class="switch" role="group" aria-label={t('nav.langLabel')}>
   {
-    langs.map((l) => (
-      <a
-        href={switchLangPath(Astro.url.pathname, l)}
-        hreflang={l}
-        lang={l}
-        aria-current={l === lang ? 'true' : undefined}
-      >
-        {l.toUpperCase()}
-      </a>
+    langs.map((l, i) => (
+      <>
+        {i > 0 && <span aria-hidden="true">/</span>}
+        <a href={switchLangPath(Astro.url.pathname, l)} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined}>
+          {languages[l]}
+        </a>
+      </>
     ))
   }
 </div>
@@ -27,21 +25,18 @@ const t = useTranslations(lang);
 <style>
   .switch {
     display: flex;
-    gap: 4px;
+    gap: 0.625rem;
     align-items: center;
-    padding: 4px;
-    border: 1px solid var(--color-border-strong);
-    border-radius: var(--radius-pill);
-    font-size: var(--text-xs);
-    font-weight: 600;
-  }
-  a {
-    padding: 6px 12px;
-    border-radius: var(--radius-pill);
     color: var(--color-muted);
   }
+  a {
+    color: var(--color-muted);
+  }
+  a:hover {
+    color: var(--color-accent);
+  }
   a[aria-current='true'] {
-    background: var(--color-text);
-    color: var(--color-on-inverse);
+    font-weight: 600;
+    color: var(--color-text);
   }
 </style>

@@ -1,5 +1,6 @@
 ---
 import PostRow from '@/components/PostRow.astro';
+import SplitSection from '@/components/SplitSection.astro';
 import { site } from '@/config/site';
 import { type Lang } from '@/i18n/ui';
 import { getPosts, localizePath, useTranslations } from '@/i18n/utils';
@@ -15,40 +16,22 @@ const posts = (await getPosts(lang)).slice(0, site.recentPostsLimit);
 
 {
   posts.length > 0 && (
-    <section id="writing" class="writing">
-      <div class="head">
-        <h2 class="label">{t('section.writing')}</h2>
-        <a href={localizePath(lang, '/writing/')} class="all">
-          {t('writing.all')}
-        </a>
-      </div>
+    <SplitSection
+      id="writing"
+      label={t('section.writing')}
+      moreHref={localizePath(lang, '/writing/')}
+      moreLabel={t('writing.all')}
+    >
       <ul class="list">
         {posts.map((post) => (
           <PostRow lang={lang} post={post} />
         ))}
       </ul>
-    </section>
+    </SplitSection>
   )
 }
 
 <style>
-  .writing {
-    padding-block: var(--section-y);
-    border-bottom: 1px solid var(--color-border);
-  }
-  .head {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 1.5rem;
-  }
-  .all {
-    font-size: 0.9375rem;
-    font-weight: 600;
-    color: var(--color-accent);
-  }
   .list {
     margin: 0;
     padding: 0;

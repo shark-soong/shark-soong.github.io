@@ -27,7 +27,6 @@ const items = [
       <li>
         <a href={i.href} rel={i.external ? 'me noopener' : undefined}>
           {i.label}
-          {i.external && <span aria-hidden="true"> ↗</span>}
         </a>
       </li>
     ))
@@ -38,8 +37,8 @@ const items = [
   .links {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem 1.75rem;
-    margin: 2rem 0 0;
+    gap: 0 1.5rem;
+    margin: 0;
     padding: 0;
     list-style: none;
     font-weight: 500;
@@ -51,8 +50,10 @@ const items = [
     font-weight: 400;
   }
   .md a {
-    display: inline-block;
-    padding-bottom: 2px;
-    border-bottom: 2px solid currentColor;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    text-decoration: underline;
+    text-underline-offset: 5px;
   }
 </style>
