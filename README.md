@@ -104,7 +104,7 @@ order: 20           # 클수록 위
 
 ### 홈 소개 문단 고치기
 
-`src/content/profile/ko.md`(영어는 `en.md`)의 **본문**이 홈 상단 소개 문단입니다. 마크다운이라 `[링크](https://...)`를 문장 안에 넣을 수 있어요. 이름, 한 줄 소개, 기술, 링크(GitHub/LinkedIn/Email/X)는 위쪽 frontmatter에서 고칩니다.
+`src/content/profile/ko.md`(영어는 `en.md`)의 **본문**이 홈 상단 소개 문단입니다. 마크다운이라 `[링크](https://...)`를 문장 안에 넣을 수 있어요. 이름, 한 줄 소개, 링크(GitHub/LinkedIn/Email/X)는 위쪽 frontmatter에서 고칩니다. (`skills`는 지금 화면에 표시하지 않습니다.)
 
 ### /now 페이지 업데이트
 

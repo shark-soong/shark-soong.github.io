@@ -16,12 +16,14 @@ const featured = [
   ...all.filter((p) => p.entry.data.featured),
   ...all.filter((p) => !p.entry.data.featured),
 ].slice(0, site.featuredLimit);
+// 홈에 다 보여주지 못한 프로젝트가 있을 때만 "전체 프로젝트 →" 링크를 답니다.
+const hasMore = all.length > featured.length;
 ---
 
 <SplitSection
   id="projects"
   label={t('section.projects')}
-  moreHref={localizePath(lang, '/projects/')}
+  moreHref={hasMore ? localizePath(lang, '/projects/') : undefined}
   moreLabel={t('projects.all')}
 >
   <ul class="list">

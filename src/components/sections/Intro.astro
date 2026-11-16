@@ -29,18 +29,9 @@ const updated = `${parts.find((p) => p.type === 'year')?.value}.${parts.find((p)
       <Content />
     </div>
     <SocialLinks lang={lang} links={data.links} resume={data.resume} />
-    <div class="meta">
-      {
-        data.skills.length > 0 && (
-          <p>
-            {t('section.skills')} · {data.skills.join(', ')}
-          </p>
-        )
-      }
-      <p>
-        {t('page.updated')} <time datetime={builtAt.toISOString()}>{updated}</time>
-      </p>
-    </div>
+    <p class="meta">
+      {t('page.updated')} <time datetime={builtAt.toISOString()}>{updated}</time>
+    </p>
   </div>
   <div class="main">
     <Experience lang={lang} />
@@ -89,9 +80,6 @@ const updated = `${parts.find((p) => p.type === 'year')?.value}.${parts.find((p)
     color: var(--color-accent);
   }
   .meta {
-    display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
     font-size: var(--text-sm);
     color: var(--color-muted);
     font-variant-numeric: tabular-nums;

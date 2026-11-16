@@ -10,7 +10,10 @@ interface Props {
 }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const posts = (await getPosts(lang)).slice(0, site.recentPostsLimit);
+const allPosts = await getPosts(lang);
+const posts = allPosts.slice(0, site.recentPostsLimit);
+// 홈에 다 보여주지 못한 글이 있을 때만 "전체 글 →" 링크를 답니다.
+const hasMore = allPosts.length > posts.length;
 // 공개된 글이 하나도 없으면 섹션 전체를 숨깁니다.
 ---
 
@@ -19,7 +22,7 @@ const posts = (await getPosts(lang)).slice(0, site.recentPostsLimit);
     <SplitSection
       id="writing"
       label={t('section.writing')}
-      moreHref={localizePath(lang, '/writing/')}
+      moreHref={hasMore ? localizePath(lang, '/writing/') : undefined}
       moreLabel={t('writing.all')}
     >
       <ul class="list">
