@@ -1,18 +1,20 @@
 ---
 import SocialLinks from './SocialLinks.astro';
 import { type Lang } from '@/i18n/ui';
-import { getProfile } from '@/i18n/utils';
+import { getProfile, localizePath, useTranslations } from '@/i18n/utils';
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
+const t = useTranslations(lang);
 const profile = await getProfile(lang);
 ---
 
 <footer class="container">
   <div class="footer">
     <SocialLinks lang={lang} links={profile.data.links} size="sm" />
+    <a href={localizePath(lang, '/rss.xml')} class="rss">{t('writing.rss')}</a>
   </div>
 </footer>
 
