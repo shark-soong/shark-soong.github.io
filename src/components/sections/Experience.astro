@@ -27,7 +27,7 @@ const items = await getExperience(lang, site.timelineKinds);
         items.map(({ data }, i) => (
           <li class:list={['item', 'fade-up', { current: !data.end }]} style={`--delay: ${(0.3 + i * 0.15).toFixed(2)}s`}>
             <p class="when">
-              {data.start} — {data.end ?? t('experience.present')}
+              {data.end === data.start ? data.start : `${data.start} — ${data.end ?? t('experience.present')}`}
             </p>
             <h3>
               {data.org} · {data.role}

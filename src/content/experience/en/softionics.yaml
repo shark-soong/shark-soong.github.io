@@ -1,0 +1,7 @@
+kind: work
+org: Softionics
+role: Summer Field Internship (SMT setup & PCB assembly)
+description: Brought up an in-house pick-and-place line for a contactless-sensor test board — sourced 47 parts on reels, converted KiCad placements to .dpv, and designed a 3D-printed stencil jig. Traced a silent machine stop on multi-part jobs to uncalibrated vision parameters by isolating the failing case and reading the converter source.
+start: "2026.07"
+end: "2026.07"
+order: 15
