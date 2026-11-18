@@ -20,11 +20,13 @@ summary: |
   - 흡착 높이·reel 설치를 의심했으나 아님 → 1종류 .dpv는 정상 → .dpv의 부품별 설정 문제로 범위 축소
   - 피더 미매칭(feeder 99) 가설은 배제: 미매칭이면 흡착이 안 되고 알람이 울려야 하는데, 실제로는 흡착 성공·알람 없음
   - (변환 코드 확인) convert.py는 Station의 Status와 EComponent의 Skip을 같은 피더 값으로 계산 → 변환 단계에서 두 값이 어긋날 가능성은 낮음
-  - (변환 코드 확인) 같은 코드가 Station의 SizeX/SizeY(비전이 쓰는 부품 크기)를 항상 0으로 기록 → 비전 값은 장비의 MStack에서 직접 보정해야 함 → 테스트 때 보정한 첫 부품만 동작하고, 보정하지 않은 두 번째 부품에서 멈췄을 가능성이 가장 유력
+  - (변환 코드 확인) 같은 코드가 Station의 SizeX/SizeY(비전이 쓰는 부품 크기)를 항상 0으로 기록 → 비전 값은 장비의 MStack에서 부품마다 직접 보정해야 함
+  - 테스트 때 첫 부품만 MStack 비전 값을 직접 보정했음 → 보정하지 않은 두 번째 부품에서 비전 단계로 못 넘어가고 정지한 것으로 원인 판단 (실습 종료로 재실행 검증은 못 함)
   - 스텐실 중심 정렬은 주문할 때 따로 요청해야 함
   [해결]
   - 원인 범위를 .dpv로 좁히고 프로그램 개발부에 정상/비정상 .dpv 비교 분석 요청 (실습 종료 시점)
-  - 다음 확인 순서 정리: 두 번째 부품의 MStack 비전 값 보정 → Step 모드로 정지 지점 특정 → 비전 플래그를 끄고 재현 테스트 → Station Status와 EComponent Skip 값 비교
+  - 해결 방법 정리: 모든 부품의 MStack 비전 값 보정, 또는 피더 표에 부품 크기를 넣고 변환기가 SizeX/SizeY를 채우도록 수정
+  - 그래도 멈출 때의 확인 순서: Step 모드로 정지 지점 특정 → 비전 플래그를 끄고 재현 테스트 → Station Status와 EComponent Skip 값 비교
   - 다음 스텐실은 중심 정렬로 주문하기로 결정
   [참고 자료 (GitHub)]
   - sparkfunX/Desktop-PickAndPlace-CHMT36VA: KiCad-Conversion/convert.py (Station SizeX/SizeY를 0으로 기록, Status·Skip을 같은 비트 규칙으로 계산)
