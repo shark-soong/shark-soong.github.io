@@ -101,7 +101,7 @@ collections:
         name: category
         widget: select
         i18n: duplicate
-        options: [교육봉사, 아르바이트, 교내근로, 인턴, 현장실습, 실습, 교육, 프로젝트, 공모전·대회, 학업, 장학, 해외연수, 기업탐방, 병역, 기타]
+        options: [교육봉사, 동아리, 아르바이트, 교내근로, 인턴, 현장실습, 실습, 교육, 프로젝트, 공모전·대회, 학업, 장학, 해외연수, 기업탐방, 병역, 기타]
       - { label: 기간 (예 2026.07.01 – 2026.07.14), name: period, widget: string, i18n: true }
       - label: 정리 방식
         name: method
