@@ -1,11 +1,18 @@
 year: 2026
 stage: "4학년"
-title: "센서빅데이터처리 파이널 프로젝트 · SKAB 산업 설비 이상 탐지"
+title: "센서빅데이터처리 (4-1학기) · 과제 4개 + 파이널 프로젝트 SKAB 산업 설비 이상 탐지"
 category: "프로젝트"
-period: "2026.05.28 – 2026.06.17 (약 3주, 4-1학기 수업) · 후속 v2 2026.11.20"
+period: "2026.03 – 2026.06 수업 · 파이널 2026.05.28 – 2026.06.17 (약 3주) · 후속 v2 2026.11.20"
 method: ppcs
 order: 125
 summary: |
+  [수업 구성]
+  - MIT 6.0002 기반 이론 15강 (최적화·그래프 → 확률·시뮬레이션·신뢰구간 → 회귀·과적합·교차검증 → 클러스터링·분류·ROC → Statistical Sins)
+  - 실습 5회·과제 4개: 센서 데이터를 수집 → 파싱·클렌징 → DB → 시각화 → 분석 순서로 처리
+  - 과제 1 (파싱·클렌징, Harmonic Drive 토크): 배치별 최대·최소의 중앙값으로 이상치 기준(약 ±15 Nm) 설정, 결측은 앞뒤 평균으로 보간, 평균 진폭에 가까운 주기 114개를 JSON으로 저장
+  - 과제 2 (DB, 가속도 센서): 테이블 5개 ERD 설계 → MariaDB 구축, JOIN·GROUP BY·HAVING으로 구간·채널별 통계 검색
+  - 과제 3 (시각화, SKAB 밸브 고장): 단일 센서로는 부족, 상관계수보다 pairplot이 분리를 더 잘 보여줌 (temperature & thermocouple 조합)
+  - 과제 4 = 파이널 프로젝트 (아래)
   [성과]
   - (HW4, 수업 제출) SKAB 밸브 이상 데이터 20개 파일을 시각화·PCA·미분 분석 → RateRMS(유량)·Accelerometer2RMS를 핵심 센서로 고르고, 가중치(4/7, 3/7)와 임계값으로 Hyper Feature를 정의해 변화점 탐지
   - (v2, 수업 후 개인 후속) 같은 단계를 학습 모델 4종(Logistic Regression, LightGBM, 1D-CNN, LSTM-Autoencoder)으로 바꾸고, 누수를 막은 평가 체계를 새로 설계
@@ -34,5 +41,6 @@ summary: |
   - 운전 조건이 다른 데이터(anomaly-free, 유량 약 4배)로의 일반화는 미검증
   - 오경보 1회 = 120초 지연이라는 비용은 설계 가정
   [기타]
-  - 사용: Python, PyTorch, scikit-learn, LightGBM, pandas
+  - 강의와의 연결: 10강 교차검증(학습에 안 쓴 데이터로 평가) → 파일 단위 5-fold / 13강 정확도의 함정·ROC → AUC·F1·오경보로 평가 / 15강 Statistical Sins(plot the data, sanity check) → HW4 재평가와 시간 누수 대조 실험 / 실습 5 PCA → 센서 선택 재검증
+  - 사용: Python, pandas, Seaborn, MariaDB(HeidiSQL), PyTorch, scikit-learn, LightGBM
   - 참고 논문: BiLSTM-VAE dynamic loss (Results in Engineering, 2025), Anomaly Detection Augmented with Regression (CODS-COMAD 2024)
