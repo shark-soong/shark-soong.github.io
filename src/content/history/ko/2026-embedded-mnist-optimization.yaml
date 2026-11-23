@@ -1,0 +1,41 @@
+year: 2026
+stage: "4학년"
+title: "임베디드시스템설계 (4-1학기) · 과제 3개 + 프로젝트 MCU 위 MNIST 추론 최적화"
+category: "프로젝트"
+period: "2026.03 – 2026.06 수업 · 프로젝트 2026.05.28 – 2026.06.18"
+method: ppcs
+order: 126
+summary: |
+  [수업 구성]
+  - 과제 1 (04/02): Python CLI 도서대출관리 — NumPy ndarray·클래스 상속·모듈화, 회원가입·JSON 저장 추가 구현
+  - 과제 2 (04/30): 직접 설계한 MNIST CNN → Arduino Nano 33 BLE 포팅 → INT8 양자화
+  - 과제 3 (05/26): Apache TVM으로 TFLite → C 변환 후 수동 최적화
+  - 프로젝트 (05/28 – 06/18, 3차 발표·평가): TFLM + CMSIS-NN 수행 엔진 프로파일링·최적화 (필수: loop unrolling + SIMD, 정확도 0.98 이상)
+  [성과]
+  - 같은 MNIST 모델의 보드 추론시간 909.5 ms(TVM plain C) → 100.3 ms(TFLM 최종), 약 9.1배
+  - 과제 2: 정확도 0.9921 → 0.9924 유지하며 약 600 → 190 ms (약 3.2배), 모델 172,724 → 49,480 B
+  - 과제 3: 909,532 → 526,122 µs (1.73배), TVM opt_level=3(1.16배)보다 수동 unrolling이 효과적
+  - 프로젝트: 238,811 → 약 100,300 µs (2.38배, −58%), 테스트 30장 30/30 정답
+  [문제]
+  - 기준 상태 CONV 5개가 전체의 95.5%, 그중 CONV4·5가 73.6%
+  - 2차 발표에서 74 ms라고 발표한 결과가 실제로는 30장 중 2장만 맞히는 잘못된 코드였음
+  - 과제 2에서 BN이 있는 모델을 양자화하자 정확도 0.99 → 0.1로 붕괴
+  [원인]
+  - 뒷단으로 갈수록 입력 채널 1 → 64로 늘어 GEMM 반복·SMLAD 횟수 증가 (병목: arm_convolve_s8의 im2col, arm_nn_mat_mult_kernel_s8_s16의 SMLAD 루프)
+  - 모델이 Flash에 있어 캐시 미스마다 약 4사이클 추가, 아두이노 기본 컴파일 옵션이 크기 최적화(-Os)
+  - 2차 오류: read_and_pad 대체 함수 때문에 SMLAD 횟수가 절반으로 줄어 있었음, 변경마다 출력 비교를 안 함
+  [해결]
+  - 1차 (−35%): im2col 3×3 완전 전개, GEMM 누산 4 → 8개 전개, 커널 크기·batch 특수화, strength reduction
+  - 2차 (−17%): -O2/-O3 + -funroll-loops, 논문의 D2I 방식은 시도 후 더 느려 기각
+  - 3차: 모델 SRAM 적재 + arena 100 → 20 KB + resolver 4개로 축소 (−16%), MEAN 레이어 int8 전용 경로(약 8 → 0.3 ms), dilation·bias 분기 제거
+  - 2차 오류를 3차에서 정확도 재측정으로 스스로 발견해 129 ms로 정정
+  - 과제 2는 BN 제거로 해결, Full-integer PTQ
+  [부족한 점]
+  - 최적화마다 원본과 bit-exact 비교하는 골든 테스트가 없었음 (가장 큰 약점), 최종 검증도 30장뿐
+  - 보고서 수치 오류: CONV5 SMLAD를 4배 과소추정, 2차 감소율 27%(실제 16.8%) 등
+  - 사실 오류: "M4엔 SIMD가 없다", "아두이노 기본 O0"(실제 -Os) 등
+  - 원인 분석이 추정에 머묾 → objdump·DWT 사이클 카운터로 검증했어야
+  - 3×3·dilation 1·bias·batch 1 하드코딩 → 다른 모델에서 오동작, fallback 필요
+  [기타]
+  - 상세: 홈페이지 프로젝트 「MCU 위 MNIST 추론 최적화」, Claude 문서 「임베디드시스템설계 과제·프로젝트 정리」
+  - 사용: C/C++, Arduino(mbed_nano), TensorFlow/Keras, TFLite Micro, CMSIS-NN, Apache TVM, Colab, Netron
