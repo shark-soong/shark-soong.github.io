@@ -218,3 +218,29 @@ h3 {
 .prose ol {
   padding-left: 1.25em;
 }
+/* 표: 좁은 화면에서는 가로로 스크롤 */
+.prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  font-variant-numeric: tabular-nums;
+}
+.prose th,
+.prose td {
+  padding: 0.6em 1em;
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: top;
+}
+.prose th {
+  font-weight: 600;
+  color: var(--color-text);
+  border-bottom-color: var(--color-border-strong);
+  white-space: nowrap;
+}
+.prose td:first-child {
+  white-space: nowrap;
+}
