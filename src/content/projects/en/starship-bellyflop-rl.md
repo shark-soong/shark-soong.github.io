@@ -3,7 +3,7 @@ title: Starship Belly Flop Landing with Reinforcement Learning
 summary: Taught a simulated SpaceX Starship to perform the belly-flop landing (belly-down glide → flip → vertical touchdown) with PPO in Unity ML-Agents on a custom 6-DOF physics model — 85% landing success at the final curriculum stage after ~12M steps.
 date: 2026-06-22
 period: "Mar – Jun 22, 2026"
-role: Team of 4 (shared across all stages) · Convergence Capstone Design 1
+role: Team of 4 · Implementation & concept · Convergence Capstone Design 1
 tags: [Unity, C#, ML-Agents, PPO, Reinforcement learning, Physics simulation]
 featured: true
 ---
@@ -12,7 +12,7 @@ featured: true
 
 A capstone project asking a simple question: **can a rocket learn the belly-flop maneuver from reward design alone**, without PID loops or trajectory planning? Real vehicles rely on carefully tuned control laws; we built a detailed physics environment and let a PPO agent work out throttle, thrust vectoring and flap control by itself.
 
-- Team of four; we worked through every stage together rather than splitting roles.
+- Team of four, working through every stage together. **My role: implementation and the project concept** — both the original idea (semiconductor fab scheduling) and the belly-flop pivot were my proposals.
 - Unity + ML-Agents, using a Starship SN20 3D model with our own physics.
 - Final presentation: June 22, 2026.
 
@@ -61,7 +61,7 @@ Reward weights were re-tuned repeatedly by watching rollouts for overshoot and h
 - **Actuator chatter:** discrete actions make the gimbal and flaps snap between −15° and +15°, which real actuators can't follow.
 - **Sim-to-real gap:** no wind, sensor noise or fuel slosh.
 - **Scope:** training covered only 0–500 m in the pitch plane.
-- **Next (Capstone 2):** continuous actions, roll/yaw control, and the full flight from launch to landing.
+- **Proposed follow-up:** continuous actions, roll/yaw control, and the full flight from launch to landing.
 
 ## What I learned
 
